@@ -1,15 +1,16 @@
 # Barbas Hats - sublinks por gorra
 
-Aqui despues puedes crear una carpeta por cada gorra especifica.
-
-Ejemplo:
+Usa esta estructura para cada gorra:
 
 barbas-hats/caps/nombre-del-modelo/index.html
 
-La URL quedaria:
+Ejemplo ya creado:
+barbas-hats/caps/chrome-ct/index.html
 
-https://premiumcapverify.site/barbas-hats/caps/nombre-del-modelo/
+URL:
+https://premiumcapverify.site/barbas-hats/caps/chrome-ct/
 
-La pagina principal de la marca sigue siendo:
-
-https://premiumcapverify.site/barbas-hats/
+Solo cambia:
+- el texto de <title>
+- el texto principal de la linea class="cap-name"
+- si quieres el numero de escaneos

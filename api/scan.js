@@ -1,5 +1,51 @@
+const COUNTER_NAMESPACE = "premiumcapverify-site-salva";
+const BASE_SCAN_OFFSET = 2;
+
+function cleanKey(value) {
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 120);
+}
+
+function extractCount(data) {
+  const candidates = [
+    data && data.count,
+    data && data.value,
+    data && data.data,
+    data && data.result,
+    data && data.counter && data.counter.count,
+    data && data.counter && data.counter.value,
+    data && data.data && data.data.count,
+    data && data.data && data.data.value,
+    data && data.result && data.result.count,
+    data && data.result && data.result.value
+  ];
+
+  for (const item of candidates) {
+    const number = Number(item);
+    if (Number.isFinite(number)) {
+      return number;
+    }
+  }
+
+  const text = JSON.stringify(data || {});
+  const match = text.match(/"(count|value|data|result)"\s*:\s*(\d+)/i);
+
+  if (match) {
+    return Number(match[2]);
+  }
+
+  return null;
+}
+
 export default async function handler(request, response) {
   response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+  response.setHeader("Pragma", "no-cache");
+  response.setHeader("Expires", "0");
 
   try {
     if (request.method !== "GET" && request.method !== "POST") {
@@ -9,62 +55,57 @@ export default async function handler(request, response) {
       });
     }
 
-    const rawKey = String(request.query.key || "").trim();
+    const safeKey = cleanKey(request.query.key);
 
-    if (!rawKey) {
+    if (!safeKey) {
       return response.status(400).json({
         ok: false,
         error: "missing_key"
       });
     }
 
-    const safeKey = rawKey
-      .toLowerCase()
-      .replace(/[^a-z0-9:_/-]/g, "-")
-      .replace(/-+/g, "-")
-      .slice(0, 120);
+    const counterUrl =
+      "https://api.counterapi.dev/v1/" +
+      encodeURIComponent(COUNTER_NAMESPACE) +
+      "/" +
+      encodeURIComponent(safeKey) +
+      "/up";
 
-    const redisKey = `premium-cap-verify:scans:${safeKey}`;
-
-    const redisUrl =
-      process.env.UPSTASH_REDIS_REST_URL ||
-      process.env.KV_REST_API_URL;
-
-    const redisToken =
-      process.env.UPSTASH_REDIS_REST_TOKEN ||
-      process.env.KV_REST_API_TOKEN;
-
-    if (!redisUrl || !redisToken) {
-      return response.status(500).json({
-        ok: false,
-        error: "missing_redis_env",
-        message: "Redis environment variables are missing in Vercel."
-      });
-    }
-
-    const redisResponse = await fetch(`${redisUrl}/incr/${encodeURIComponent(redisKey)}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${redisToken}`
-      }
+    const counterResponse = await fetch(counterUrl, {
+      method: "GET",
+      cache: "no-store"
     });
 
-    const data = await redisResponse.json();
+    const data = await counterResponse.json().catch(function () {
+      return {};
+    });
 
-    if (!redisResponse.ok) {
+    if (!counterResponse.ok) {
       return response.status(500).json({
         ok: false,
-        error: "redis_error",
+        error: "counter_api_error",
         details: data
       });
     }
 
-    const count = Number(data.result || 0);
+    const realCount = extractCount(data);
+
+    if (!Number.isFinite(realCount)) {
+      return response.status(500).json({
+        ok: false,
+        error: "invalid_counter_response",
+        details: data
+      });
+    }
+
+    const displayCount = realCount + BASE_SCAN_OFFSET;
 
     return response.status(200).json({
       ok: true,
       key: safeKey,
-      count
+      realCount: realCount,
+      baseOffset: BASE_SCAN_OFFSET,
+      count: displayCount
     });
   } catch (error) {
     return response.status(500).json({

@@ -2,7 +2,7 @@ function formatScans(count) {
   const number = Number(count);
 
   if (!Number.isFinite(number)) {
-    return "2 SCANS";
+    return "SCAN ERROR";
   }
 
   if (number === 1) {
@@ -23,7 +23,8 @@ function getScanKey() {
     .toLowerCase()
     .replace(/^\/+|\/+$/g, "")
     .replace(/[^a-z0-9/-]/g, "-")
-    .replace(/\/+/g, ":");
+    .replace(/\/+/g, "-")
+    .replace(/-+/g, "-");
 
   return cleanPath || "home";
 }
@@ -40,7 +41,7 @@ async function updateScanCount() {
   try {
     scanElement.textContent = "LOADING";
 
-    const response = await fetch("/api/scan?key=" + encodeURIComponent(scanKey), {
+    const response = await fetch("/api/scan?key=" + encodeURIComponent(scanKey) + "&t=" + Date.now(), {
       method: "GET",
       cache: "no-store"
     });
@@ -49,14 +50,14 @@ async function updateScanCount() {
 
     if (!response.ok || !data.ok) {
       console.error("Scan counter error:", data);
-      scanElement.textContent = "2 SCANS";
+      scanElement.textContent = "SCAN ERROR";
       return;
     }
 
     scanElement.textContent = formatScans(data.count);
   } catch (error) {
     console.error("Scan counter request failed:", error);
-    scanElement.textContent = "2 SCANS";
+    scanElement.textContent = "SCAN ERROR";
   }
 }
 

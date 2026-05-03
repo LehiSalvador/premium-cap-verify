@@ -1,25 +1,18 @@
-# Scan counter
+# Contador real de scans
 
-El contador usa:
+El contador ya no es texto fijo.
 
-- api/scan.js
-- script.js
-- Redis/Upstash conectado en Vercel
+Cada vez que alguien abre o recarga la pagina:
+1. script.js llama a /api/scan.
+2. api/scan.js llama a CounterAPI.
+3. CounterAPI suma +1.
+4. La pagina muestra el nuevo total.
 
-Variables necesarias en Vercel:
+El contador usa un offset base de 2.
+Eso significa que la primera visita real del sistema mostrara 3 SCANS.
 
-- UPSTASH_REDIS_REST_URL
-- UPSTASH_REDIS_REST_TOKEN
+Pagina de prueba:
+https://premiumcapverify.site/barbas-hats/caps/chrome-ct/
 
-Tambien acepta:
-
-- KV_REST_API_URL
-- KV_REST_API_TOKEN
-
-Cada pagina debe tener:
-
-<strong id="scanCount" data-scan-key="cap:marca:modelo">LOADING</strong>
-
-Ejemplo Chrome CT:
-
-data-scan-key="cap:barbas-hats:chrome-ct"
+API de prueba:
+https://premiumcapverify.site/api/scan?key=barbas-hats-caps-chrome-ct

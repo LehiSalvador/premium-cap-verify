@@ -1,18 +1,20 @@
-﻿# Premium Cap Verify
+# Premium Cap Verify
 
-Pagina estatica de verificacion NFC para gorras.
+Pagina estatica para check de gorras.
 
-## Estructura
+No hay botones ni menu hacia las paginas internas.
+Cada pagina se accede solo con su link directo.
 
-- index.html
-- style.css
-- script.js
-- assets/verification-seal.png
+## URLs creadas
 
-## Ejemplo de link
+- https://premiumcapverify.com/barbas-hats/3005/
+- https://premiumcapverify.com/barbas-hats/rockstar-ict/
+- https://premiumcapverify.com/dandy-hats/black-gold/
 
-https://premiumcapverify.com/?scans=2
+## Imagenes
 
-## Nota
+Las imagenes de cada gorra estan en:
 
-El contador de scans es visual/estatico. Para contar scans reales se necesitaria una base de datos o analytics.
+assets/caps/
+
+Puedes reemplazar cada SVG por una imagen real usando el mismo nombre.

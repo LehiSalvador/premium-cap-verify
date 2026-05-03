@@ -1,4 +1,4 @@
-﻿* {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -46,32 +46,43 @@ body {
   letter-spacing: 4px;
   font-weight: 800;
   color: #bdbdbd;
-  margin-bottom: 34px;
+  margin-bottom: 30px;
 }
 
-.seal-container {
-  width: 230px;
-  height: 230px;
+.cap-image-box {
+  width: 245px;
+  height: 245px;
   margin: 0 auto 28px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.seal-image {
+.cap-image {
   width: 100%;
-  max-width: 230px;
-  height: auto;
+  max-width: 245px;
+  max-height: 245px;
+  object-fit: contain;
   display: block;
   filter: drop-shadow(0 0 20px rgba(255,255,255,0.16));
 }
 
 h1 {
-  font-size: 54px;
-  line-height: 0.95;
+  font-size: 44px;
+  line-height: 0.98;
   font-weight: 900;
   letter-spacing: 2px;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+
+.sub-brand {
+  font-size: 14px;
+  letter-spacing: 3px;
+  color: #bdbdbd;
+  font-weight: 800;
+  margin-bottom: 24px;
+  text-transform: uppercase;
 }
 
 .line {
@@ -163,17 +174,18 @@ h1 {
     padding: 30px 18px;
   }
 
-  .seal-container {
-    width: 200px;
-    height: 200px;
+  .cap-image-box {
+    width: 210px;
+    height: 210px;
   }
 
-  .seal-image {
-    max-width: 200px;
+  .cap-image {
+    max-width: 210px;
+    max-height: 210px;
   }
 
   h1 {
-    font-size: 44px;
+    font-size: 36px;
   }
 
   .scan-section strong {

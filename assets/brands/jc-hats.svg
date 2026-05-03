@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900">
+  <rect width="900" height="900" fill="#050505"/>
+  <circle cx="450" cy="450" r="330" fill="none" stroke="#ffffff" stroke-width="18" opacity="0.9"/>
+  <circle cx="450" cy="450" r="280" fill="none" stroke="#8b0000" stroke-width="10" opacity="0.9"/>
+  <text x="450" y="430" text-anchor="middle" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="66" font-weight="900">JC HATS</text>
+  <text x="450" y="535" text-anchor="middle" fill="#bdbdbd" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">PREMIUM CAP VERIFY</text>
+</svg>

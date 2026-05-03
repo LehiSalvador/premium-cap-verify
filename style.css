@@ -49,7 +49,7 @@ body {
   margin-bottom: 30px;
 }
 
-.cap-image-box {
+.brand-image-box {
   width: 245px;
   height: 245px;
   margin: 0 auto 28px;
@@ -58,7 +58,7 @@ body {
   justify-content: center;
 }
 
-.cap-image {
+.brand-image {
   width: 100%;
   max-width: 245px;
   max-height: 245px;
@@ -174,12 +174,12 @@ h1 {
     padding: 30px 18px;
   }
 
-  .cap-image-box {
+  .brand-image-box {
     width: 210px;
     height: 210px;
   }
 
-  .cap-image {
+  .brand-image {
     max-width: 210px;
     max-height: 210px;
   }

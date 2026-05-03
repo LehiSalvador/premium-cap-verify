@@ -7,14 +7,18 @@ Cada pagina se accede solo con su link directo.
 
 ## URLs creadas
 
-- https://premiumcapverify.com/barbas-hats/3005/
-- https://premiumcapverify.com/barbas-hats/rockstar-ict/
-- https://premiumcapverify.com/dandy-hats/black-gold/
+- https://premiumcapverify.com/barbas-hats/
+- https://premiumcapverify.com/dandy-hats/
+- https://premiumcapverify.com/rude-awakenings/
+- https://premiumcapverify.com/31-hats/
+- https://premiumcapverify.com/gallo-fino/
+- https://premiumcapverify.com/jc-hats/
+- https://premiumcapverify.com/baez/
 
 ## Imagenes
 
-Las imagenes de cada gorra estan en:
+Las imagenes de cada marca estan en:
 
-assets/caps/
+assets/brands/
 
 Puedes reemplazar cada SVG por una imagen real usando el mismo nombre.

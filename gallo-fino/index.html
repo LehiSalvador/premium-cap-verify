@@ -2,37 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="Premium cap check page." />
-
   <title>GALLO FINO | Premium Cap Verify</title>
-
   <link rel="stylesheet" href="/style.css" />
 </head>
 
-<body style="--bg-webp: url('/assets/backgrounds/gallo-fino-bg.webp'); --bg-png: url('/assets/backgrounds/gallo-fino-bg.png'); --bg-jpg: url('/assets/backgrounds/gallo-fino-bg.jpg');">
+<body class="brand-background" style="--brand-bg: url('/assets/backgrounds/gallo-fino-bg.jpg');">
   <main class="page">
-
     <section class="card">
 
-      <p class="brand">PREMIUM CAP VERIFY</p>
+      <p class="top-label">AUTHENTIC PREMIUM CAP</p>
 
       <div class="brand-image-box">
         <img src="/assets/brands/gallo-fino.svg" alt="GALLO FINO" class="brand-image" />
       </div>
 
-      <h1>GALLO FINO</h1>
+      <h1 class="main-title">AUTHENTIC</h1>
 
-      <p class="sub-brand">BRAND CHECK</p>
+      <p class="cap-name">GORRA GALLO FINO</p>
 
       <div class="line"></div>
 
       <div class="scan-section">
         <p>TOTAL SCAN COUNT</p>
-        <strong id="scanCount">2 SCANS</strong>
+        <strong id="scanCount" data-scan-key="gallo-fino">LOADING</strong>
       </div>
 
       <div class="verify-pill">
@@ -52,9 +47,8 @@
       </p>
 
     </section>
-
   </main>
 
-  <script src="/script.js"></script>
+  <script src="/script.js?v=scan-counter-v4"></script>
 </body>
 </html>

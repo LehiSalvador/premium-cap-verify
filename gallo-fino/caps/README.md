@@ -1,14 +1,14 @@
-# BARBAS HATS - sublinks por gorra
+# GALLO FINO - sublinks por gorra
 
 Aqui puedes crear una carpeta por cada gorra especifica de esta marca.
 
 Ejemplo:
 
-barbas-hats/caps/nombre-del-modelo/index.html
+gallo-fino/caps/nombre-del-modelo/index.html
 
 La URL quedaria:
 
-https://premiumcapverify.site/barbas-hats/caps/nombre-del-modelo/
+https://premiumcapverify.site/gallo-fino/caps/nombre-del-modelo/
 
 Para cada gorra especifica cambia:
 - El titulo de la pagina.

@@ -1,0 +1,6 @@
+﻿Sube aqui tu imagen con este nombre exacto:
+
+verification-seal.png
+
+Ruta final:
+assets/verification-seal.png

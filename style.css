@@ -28,7 +28,7 @@ body {
 .card {
   width: 100%;
   max-width: 430px;
-  min-height: 680px;
+  min-height: 590px;
   padding: 34px 22px;
   text-align: center;
   border-radius: 28px;
@@ -52,7 +52,7 @@ body {
 .seal-container {
   width: 230px;
   height: 230px;
-  margin: 0 auto 26px;
+  margin: 0 auto 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,16 +71,7 @@ h1 {
   line-height: 0.95;
   font-weight: 900;
   letter-spacing: 2px;
-  margin-bottom: 10px;
-}
-
-.model {
-  font-size: 22px;
-  line-height: 1.1;
-  font-weight: 900;
-  letter-spacing: 1.4px;
-  color: #e6e6e6;
-  margin-bottom: 26px;
+  margin-bottom: 28px;
 }
 
 .line {
@@ -168,7 +159,7 @@ h1 {
 
 @media (max-width: 480px) {
   .card {
-    min-height: 640px;
+    min-height: 560px;
     padding: 30px 18px;
   }
 
@@ -183,10 +174,6 @@ h1 {
 
   h1 {
     font-size: 44px;
-  }
-
-  .model {
-    font-size: 19px;
   }
 
   .scan-section strong {

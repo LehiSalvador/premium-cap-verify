@@ -7,18 +7,11 @@ Pagina estatica de verificacion NFC para gorras.
 - index.html
 - style.css
 - script.js
-- vercel.json
 - assets/verification-seal.png
 
-## Ejemplos de links
+## Ejemplo de link
 
-Con ID en la ruta:
-
-https://premiumcapverify.com/SEC-D02-001
-
-Con ID, nombre y scans en parametros:
-
-https://premiumcapverify.com/?id=SEC-D02-001&name=ROCKSTAR%20ICT&scans=2
+https://premiumcapverify.com/?scans=2
 
 ## Nota
 

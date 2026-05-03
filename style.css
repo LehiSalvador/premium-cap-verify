@@ -5,6 +5,7 @@
 }
 
 html {
+  min-height: 100%;
   background: #050505;
 }
 
@@ -12,41 +13,24 @@ body {
   min-height: 100vh;
   font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   color: #ffffff;
-  background: #050505;
-  position: relative;
+  background-color: #050505;
   overflow-x: hidden;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
+body.brand-background {
   background-image:
-    linear-gradient(180deg, rgba(0,0,0,0.30), rgba(0,0,0,0.78)),
+    linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.82)),
     var(--brand-bg);
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
-  filter: blur(1.5px);
-  transform: scale(1.03);
-  opacity: 0.95;
-  z-index: -2;
+  background-attachment: fixed;
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
+body.default-background {
   background:
-    radial-gradient(circle at top center, rgba(255,255,255,0.08), transparent 34%),
-    linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.86) 100%);
-  z-index: -1;
-}
-
-body.no-bg::before {
-  background-image:
-    linear-gradient(180deg, rgba(0,0,0,0.30), rgba(0,0,0,0.78)),
-    radial-gradient(circle at center, #161616, #050505);
+    radial-gradient(circle at top center, rgba(255,255,255,0.10), transparent 34%),
+    linear-gradient(180deg, #111111 0%, #050505 58%, #000000 100%);
 }
 
 .page {
@@ -55,6 +39,9 @@ body.no-bg::before {
   align-items: center;
   justify-content: center;
   padding: 22px;
+  background:
+    radial-gradient(circle at top center, rgba(255,255,255,0.05), transparent 34%),
+    linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.38) 55%, rgba(0,0,0,0.72) 100%);
 }
 
 .card {
@@ -64,14 +51,15 @@ body.no-bg::before {
   padding: 34px 22px;
   text-align: center;
   border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.060), rgba(255,255,255,0.018)),
-    rgba(7,7,7,0.78);
-  backdrop-filter: blur(10px);
+    linear-gradient(180deg, rgba(255,255,255,0.070), rgba(255,255,255,0.020)),
+    rgba(7,7,7,0.74);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:
-    0 0 45px rgba(255,255,255,0.05),
-    0 0 80px rgba(150,0,0,0.16);
+    0 0 45px rgba(255,255,255,0.06),
+    0 0 90px rgba(150,0,0,0.18);
 }
 
 .brand {
@@ -202,6 +190,10 @@ h1 {
 }
 
 @media (max-width: 480px) {
+  body.brand-background {
+    background-attachment: scroll;
+  }
+
   .card {
     min-height: 560px;
     padding: 30px 18px;

@@ -7,18 +7,26 @@ Cada pagina se accede solo con su link directo.
 
 ## URLs creadas
 
-- https://premiumcapverify.com/barbas-hats/
-- https://premiumcapverify.com/dandy-hats/
-- https://premiumcapverify.com/rude-awakenings/
-- https://premiumcapverify.com/31-hats/
-- https://premiumcapverify.com/gallo-fino/
-- https://premiumcapverify.com/jc-hats/
-- https://premiumcapverify.com/baez/
+- https://premiumcapverify.site/barbas-hats/
+- https://premiumcapverify.site/dandy-hats/
+- https://premiumcapverify.site/rude-awakenings/
+- https://premiumcapverify.site/31-hats/
+- https://premiumcapverify.site/gallo-fino/
+- https://premiumcapverify.site/jc-hats/
+- https://premiumcapverify.site/baez/
 
-## Imagenes
+## Fondos por marca
 
-Las imagenes de cada marca estan en:
+Sube los fondos en:
 
-assets/brands/
+assets/backgrounds/
 
-Puedes reemplazar cada SVG por una imagen real usando el mismo nombre.
+Nombres de ejemplo:
+
+- barbas-hats-bg.jpg / .png / .webp
+- dandy-hats-bg.jpg / .png / .webp
+- rude-awakenings-bg.jpg / .png / .webp
+- 31-hats-bg.jpg / .png / .webp
+- gallo-fino-bg.jpg / .png / .webp
+- jc-hats-bg.jpg / .png / .webp
+- baez-bg.jpg / .png / .webp

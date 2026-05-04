@@ -1,4 +1,4 @@
-const COUNTER_NAMESPACE = "premiumcapverify-site-reset-20260504031832";
+const COUNTER_NAMESPACE = "premiumcapverify-site-reset-20260504094415";
 const BASE_SCAN_OFFSET = 0;
 
 function cleanKey(value) {

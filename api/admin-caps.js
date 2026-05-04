@@ -23,6 +23,12 @@ const IMAGE_EXT_BY_MIME = {
 
 const IMAGE_EXTS = ["webp", "png", "jpg", "jpeg"];
 
+function cleanEnvValue(value){
+  return String(value || "")
+    .replace(/^\uFEFF/, "")
+    .replace(/[\uFEFF\u200B\u200C\u200D\u2060]/g, "")
+    .trim();
+}
 function sendJson(res, status, payload){
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -32,11 +38,11 @@ function sendJson(res, status, payload){
 
 function requireEnv(){
   const env = {
-    owner: process.env.GITHUB_OWNER,
-    repo: process.env.GITHUB_REPO,
-    branch: process.env.GITHUB_BRANCH || "main",
-    token: process.env.GITHUB_TOKEN,
-    adminPassword: process.env.ADMIN_PASSWORD
+    owner: cleanEnvValue(process.env.GITHUB_OWNER),
+    repo: cleanEnvValue(process.env.GITHUB_REPO),
+    branch: cleanEnvValue(process.env.GITHUB_BRANCH || "main"),
+    token: cleanEnvValue(process.env.GITHUB_TOKEN),
+    adminPassword: cleanEnvValue(process.env.ADMIN_PASSWORD)
   };
 
   const missing = [];
@@ -55,7 +61,7 @@ function requireEnv(){
 }
 
 function validatePassword(req, env){
-  const provided = (req.headers && req.headers["x-admin-password"]) || "";
+  const provided = cleanEnvValue((req.headers && req.headers["x-admin-password"]) || "");
   if (!provided || provided !== env.adminPassword){
     const e = new Error("PIN incorrecto o sesión vencida.");
     e.statusCode = 401;
@@ -99,7 +105,7 @@ async function githubRequest(env, apiPath, options){
   const url = "https://api.github.com" + apiPath;
 
   const headers = Object.assign({
-    "Authorization": "Bearer " + env.token,
+    "Authorization": "Bearer " + cleanEnvValue(env.token),
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "premium-cap-verify-admin"

@@ -1,0 +1,21 @@
+INSTRUCCIONES PARA ESTA GORRA
+
+1. Cambiar nombre de la gorra:
+   Edita el archivo name.txt
+
+2. Subir foto de la gorra:
+   La imagen debe llamarse igual que esta carpeta.
+
+   Ejemplos para esta carpeta:
+   008.jpg
+   008.png
+   008.webp
+   008.jpeg
+
+3. URL de esta gorra:
+   https://premiumcapverify.site/jc-hats/caps/008/
+
+4. Importante:
+   No cambies el nombre index.html.
+   No borres name.txt.
+   No borres esta carpeta.

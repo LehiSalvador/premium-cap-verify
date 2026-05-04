@@ -1,0 +1,21 @@
+INSTRUCCIONES PARA ESTA GORRA
+
+1. Cambiar nombre de la gorra:
+   Edita el archivo name.txt
+
+2. Subir foto de la gorra:
+   La imagen debe llamarse igual que esta carpeta.
+
+   Ejemplos para esta carpeta:
+   020.jpg
+   020.png
+   020.webp
+   020.jpeg
+
+3. URL de esta gorra:
+   https://premiumcapverify.site/31-hats/caps/020/
+
+4. Importante:
+   No cambies el nombre index.html.
+   No borres name.txt.
+   No borres esta carpeta.

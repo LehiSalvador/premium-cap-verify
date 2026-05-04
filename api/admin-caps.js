@@ -29,6 +29,7 @@ function cleanEnvValue(value){
     .replace(/[\uFEFF\u200B\u200C\u200D\u2060]/g, "")
     .trim();
 }
+
 function sendJson(res, status, payload){
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -62,6 +63,7 @@ function requireEnv(){
 
 function validatePassword(req, env){
   const provided = cleanEnvValue((req.headers && req.headers["x-admin-password"]) || "");
+
   if (!provided || provided !== env.adminPassword){
     const e = new Error("PIN incorrecto o sesión vencida.");
     e.statusCode = 401;
@@ -71,21 +73,25 @@ function validatePassword(req, env){
 
 function validateBrand(brand){
   const found = ALLOWED_BRANDS.find(b => b.id === brand);
+
   if (!found){
     const e = new Error("Marca inválida.");
     e.statusCode = 400;
     throw e;
   }
+
   return found;
 }
 
 function normalizeCap(value){
   const raw = String(value || "").trim();
+
   if (!/^\d{1,4}$/.test(raw)){
     const e = new Error("Número de gorra inválido.");
     e.statusCode = 400;
     throw e;
   }
+
   return raw.padStart(3, "0");
 }
 
@@ -122,6 +128,7 @@ async function githubRequest(env, apiPath, options){
   const text = await resp.text();
 
   let json = null;
+
   try {
     json = text ? JSON.parse(text) : null;
   } catch (_) {
@@ -139,15 +146,15 @@ async function githubRequest(env, apiPath, options){
 function githubError(prefix, status){
   let detail = prefix + ": " + status;
 
-  if (status === 401) {
+  if (status === 401){
     detail = "GitHub rechazó el token. Revisa GITHUB_TOKEN en Vercel Production y vuelve a desplegar.";
   }
 
-  if (status === 403) {
+  if (status === 403){
     detail = "GitHub respondió, pero no permitió el acceso. Revisa que el token tenga permiso repo o Contents Read/Write.";
   }
 
-  if (status === 404) {
+  if (status === 404){
     detail = "GitHub no encontró la ruta solicitada.";
   }
 
@@ -179,7 +186,7 @@ async function githubPutContent(env, repoPath, contentBufferOrString, message){
     branch: env.branch
   };
 
-  if (existing && existing.sha) {
+  if (existing && existing.sha){
     body.sha = existing.sha;
   }
 
@@ -198,7 +205,9 @@ async function githubPutContent(env, repoPath, contentBufferOrString, message){
 
 async function getTextFile(env, repoPath){
   const item = await githubGetContent(env, repoPath);
+
   if (!item || !item.content) return "";
+
   return Buffer.from(item.content, "base64").toString("utf8").trim();
 }
 
@@ -206,6 +215,7 @@ async function findExactImage(env, brand, cap){
   for (const ext of IMAGE_EXTS){
     const imagePath = brand + "/caps/" + cap + "/" + cap + "." + ext;
     const item = await githubGetContent(env, imagePath);
+
     if (item && item.type === "file"){
       return {
         path: imagePath,
@@ -217,14 +227,107 @@ async function findExactImage(env, brand, cap){
   return null;
 }
 
+function toNumber(value, fallback){
+  const n = Number(value);
+
+  if (!Number.isFinite(n)){
+    return fallback;
+  }
+
+  return n;
+}
+
+function clamp(value, min, max, fallback){
+  const n = toNumber(value, fallback);
+
+  if (n < min) return min;
+  if (n > max) return max;
+
+  return n;
+}
+
+function parsePositionText(text){
+  const base = {
+    x: 0,
+    y: 0,
+    scale: 1,
+    width: 335,
+    height: 260
+  };
+
+  if (!text) return base;
+
+  const lines = String(text).split(/\r?\n/);
+
+  for (const line of lines){
+    const clean = line.trim();
+    if (!clean) continue;
+
+    const m = clean.match(/^([a-zA-Z]+)\s*=\s*(-?\d+(?:\.\d+)?)/);
+
+    if (!m) continue;
+
+    const key = m[1].toLowerCase();
+    const value = Number(m[2]);
+
+    if (!Number.isFinite(value)) continue;
+
+    if (key === "x") base.x = value;
+    if (key === "y") base.y = value;
+    if (key === "scale") base.scale = value;
+    if (key === "width") base.width = value;
+    if (key === "height") base.height = value;
+  }
+
+  return normalizeVisualConfig(base);
+}
+
+function normalizeVisualConfig(input){
+  input = input || {};
+
+  return {
+    x: clamp(input.x, -1000, 1000, 0),
+    y: clamp(input.y, -1000, 1000, 0),
+    scale: clamp(input.scale, 0.1, 5, 1),
+    width: Math.round(clamp(input.width, 80, 900, 335)),
+    height: Math.round(clamp(input.height, 80, 900, 260))
+  };
+}
+
+function visualConfigToPositionText(config){
+  const v = normalizeVisualConfig(config);
+
+  return [
+    "x = " + v.x,
+    "y = " + v.y,
+    "scale = " + v.scale,
+    "width = " + v.width + "px",
+    "height = " + v.height + "px",
+    ""
+  ].join("\n");
+}
+
+async function getVisualConfig(env, brand, cap){
+  const path = brand + "/caps/" + cap + "/position.txt";
+
+  try {
+    const text = await getTextFile(env, path);
+    return parsePositionText(text);
+  } catch (_) {
+    return normalizeVisualConfig({});
+  }
+}
+
 async function getCapInfo(env, brand, cap){
   const dir = brand + "/caps/" + cap;
 
   let name = "";
   let hasIndex = false;
   let image = null;
+  let visualConfig = normalizeVisualConfig({});
 
   const indexItem = await githubGetContent(env, dir + "/index.html");
+
   if (indexItem && indexItem.type === "file"){
     hasIndex = true;
   }
@@ -241,6 +344,12 @@ async function getCapInfo(env, brand, cap){
     image = null;
   }
 
+  try {
+    visualConfig = await getVisualConfig(env, brand, cap);
+  } catch (_) {
+    visualConfig = normalizeVisualConfig({});
+  }
+
   const publicUrl = "/" + brand + "/caps/" + cap + "/";
   const imageUrl = image ? "/" + image.path + "?v=" + Date.now() : null;
 
@@ -250,7 +359,8 @@ async function getCapInfo(env, brand, cap){
     name: name || ("CAP " + cap),
     publicUrl,
     imageUrl,
-    imagePath: image ? image.path : null
+    imagePath: image ? image.path : null,
+    visualConfig
   };
 }
 
@@ -258,6 +368,7 @@ function decodeDataUrlImage(dataUrl){
   if (typeof dataUrl !== "string") return null;
 
   const m = dataUrl.match(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/);
+
   if (!m) return null;
 
   const mime = m[1].toLowerCase();
@@ -266,6 +377,7 @@ function decodeDataUrlImage(dataUrl){
   if (!ext) return null;
 
   let buffer;
+
   try {
     buffer = Buffer.from(m[2], "base64");
   } catch (_) {
@@ -282,10 +394,76 @@ function decodeDataUrlImage(dataUrl){
   };
 }
 
-function updateIndexHtml(html, capName, imagePublicSrc){
+function setAttr(tag, attr, value){
+  const re = new RegExp("\\b" + attr + "=[\"'][^\"']*[\"']", "i");
+
+  if (re.test(tag)){
+    return tag.replace(re, attr + '="' + value + '"');
+  }
+
+  return tag.replace(/<img\b/i, '<img ' + attr + '="' + value + '"');
+}
+
+function setStyleProperty(style, prop, value){
+  const escaped = prop.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+  const re = new RegExp(escaped + "\\s*:\\s*[^;]+;?", "i");
+
+  if (re.test(style)){
+    style = style.replace(re, prop + ": " + value + ";");
+  } else {
+    style = style.trim();
+
+    if (style && !style.endsWith(";")){
+      style += ";";
+    }
+
+    style += " " + prop + ": " + value + ";";
+  }
+
+  return style;
+}
+
+function applyVisualToImgTag(tag, visualConfig){
+  const v = normalizeVisualConfig(visualConfig);
+
+  const transformValue = "translate(" + v.x + "px, " + v.y + "px) scale(" + v.scale + ")";
+
+  let style = "";
+  const styleMatch = tag.match(/\bstyle=["']([^"']*)["']/i);
+
+  if (styleMatch){
+    style = styleMatch[1];
+  }
+
+  style = setStyleProperty(style, "--cap-shift-x", v.x + "px");
+  style = setStyleProperty(style, "--cap-shift-y", v.y + "px");
+  style = setStyleProperty(style, "--cap-scale", String(v.scale));
+  style = setStyleProperty(style, "width", v.width + "px");
+  style = setStyleProperty(style, "height", v.height + "px");
+  style = setStyleProperty(style, "min-width", v.width + "px");
+  style = setStyleProperty(style, "min-height", v.height + "px");
+  style = setStyleProperty(style, "max-width", v.width + "px");
+  style = setStyleProperty(style, "max-height", v.height + "px");
+  style = setStyleProperty(style, "object-fit", "contain");
+  style = setStyleProperty(style, "object-position", "center center");
+  style = setStyleProperty(style, "transform", transformValue);
+  style = setStyleProperty(style, "transform-origin", "center center");
+  style = setStyleProperty(style, "visibility", "visible");
+
+  if (styleMatch){
+    tag = tag.replace(/\bstyle=["'][^"']*["']/i, 'style="' + style.trim() + '"');
+  } else {
+    tag = tag.replace(/<img\b/i, '<img style="' + style.trim() + '"');
+  }
+
+  return tag;
+}
+
+function updateIndexHtml(html, capName, imagePublicSrc, visualConfig){
   let updated = html;
   let changedName = false;
   let changedImage = false;
+  let changedVisual = false;
 
   const reCapName = /(<p[^>]*class=["'][^"']*\bcap-name\b[^"']*["'][^>]*>)([\s\S]*?)(<\/p>)/i;
 
@@ -296,36 +474,31 @@ function updateIndexHtml(html, capName, imagePublicSrc){
     });
   }
 
-  if (imagePublicSrc){
-    const reImg = /<img\b[^>]*\bclass=["'][^"']*\bcap-photo-img-clean\b[^"']*["'][^>]*>/i;
-    const m = updated.match(reImg);
+  const reImg = /<img\b[^>]*\bclass=["'][^"']*\bcap-photo-img-clean\b[^"']*["'][^>]*>/i;
+  const m = updated.match(reImg);
 
-    if (m){
-      let tag = m[0];
+  if (m){
+    let tag = m[0];
 
-      if (/\bsrc=["'][^"']*["']/i.test(tag)){
-        tag = tag.replace(/\bsrc=["'][^"']*["']/i, 'src="' + imagePublicSrc + '"');
-      } else {
-        tag = tag.replace(/<img\b/i, '<img src="' + imagePublicSrc + '"');
-      }
-
-      if (/\bdata-cap-image=["'][^"']*["']/i.test(tag)){
-        tag = tag.replace(/\bdata-cap-image=["'][^"']*["']/i, 'data-cap-image="' + imagePublicSrc + '"');
-      } else {
-        tag = tag.replace(/<img\b/i, '<img data-cap-image="' + imagePublicSrc + '"');
-      }
-
-      updated = updated.replace(reImg, tag);
+    if (imagePublicSrc){
+      tag = setAttr(tag, "src", imagePublicSrc);
+      tag = setAttr(tag, "data-cap-image", imagePublicSrc);
+      changedImage = true;
+    } else {
       changedImage = true;
     }
-  } else {
-    changedImage = true;
+
+    tag = applyVisualToImgTag(tag, visualConfig);
+    changedVisual = true;
+
+    updated = updated.replace(reImg, tag);
   }
 
   return {
     html: updated,
     changedName,
-    changedImage
+    changedImage,
+    changedVisual
   };
 }
 
@@ -354,7 +527,11 @@ async function readJsonBody(req){
         const e = new Error("Payload demasiado grande.");
         e.statusCode = 413;
         reject(e);
-        try { req.destroy(); } catch (_) {}
+
+        try {
+          req.destroy();
+        } catch (_) {}
+
         return;
       }
 
@@ -440,6 +617,7 @@ module.exports = async function handler(req, res){
       const brand = String(body.brand || "").trim();
       const cap = normalizeCap(body.cap || "");
       const capName = String(body.capName || "").trim();
+      const visualConfig = normalizeVisualConfig(body.visualConfig || {});
 
       validateBrand(brand);
 
@@ -452,6 +630,7 @@ module.exports = async function handler(req, res){
 
       const dir = brand + "/caps/" + cap;
       const indexPath = dir + "/index.html";
+      const positionPath = dir + "/position.txt";
 
       const indexItem = await githubGetContent(env, indexPath);
 
@@ -494,10 +673,17 @@ module.exports = async function handler(req, res){
         "admin: update name " + brand + "/" + cap
       );
 
+      await githubPutContent(
+        env,
+        positionPath,
+        visualConfigToPositionText(visualConfig),
+        "admin: update position " + brand + "/" + cap
+      );
+
       const currentHtml = Buffer.from(indexItem.content, "base64").toString("utf8");
       const imageSrc = imagePath ? "/" + imagePath + "?v=" + Date.now() : null;
 
-      const result = updateIndexHtml(currentHtml, capName, imageSrc);
+      const result = updateIndexHtml(currentHtml, capName, imageSrc, visualConfig);
 
       if (!result.changedName){
         return sendJson(res, 422, {
@@ -506,10 +692,17 @@ module.exports = async function handler(req, res){
         });
       }
 
-      if (imageSrc && !result.changedImage){
+      if (!result.changedImage){
         return sendJson(res, 422, {
           ok: false,
-          error: "No se encontró cap-photo-img-clean en index.html."
+          error: "No se pudo actualizar la imagen en index.html."
+        });
+      }
+
+      if (!result.changedVisual){
+        return sendJson(res, 422, {
+          ok: false,
+          error: "No se encontró cap-photo-img-clean para aplicar posición/tamaño."
         });
       }
 
@@ -517,7 +710,7 @@ module.exports = async function handler(req, res){
         env,
         indexPath,
         result.html,
-        "admin: update cap " + brand + "/" + cap
+        "admin: update cap visual config " + brand + "/" + cap
       );
 
       return sendJson(res, 200, {
@@ -526,7 +719,8 @@ module.exports = async function handler(req, res){
         cap,
         name: capName,
         publicUrl: "/" + brand + "/caps/" + cap + "/",
-        imageUrl: imageSrc
+        imageUrl: imageSrc,
+        visualConfig
       });
     }
 
@@ -537,12 +731,7 @@ module.exports = async function handler(req, res){
 
   } catch (e){
     const status = e && e.statusCode ? e.statusCode : 500;
-
-    let message = e && e.message ? e.message : "Error interno.";
-
-    if (status === 500 && message === "Error interno."){
-      message = "Error interno en la API.";
-    }
+    const message = e && e.message ? e.message : "Error interno en la API.";
 
     return sendJson(res, status, {
       ok: false,

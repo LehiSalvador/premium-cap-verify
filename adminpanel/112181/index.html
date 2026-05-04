@@ -6,8 +6,8 @@
 <meta name="robots" content="noindex, nofollow" />
 <meta name="referrer" content="no-referrer" />
 <title>Premium Cap Verify Admin</title>
-<link rel="stylesheet" href="/adminpanel/112181/admin.css?v=20260504162102" />
-<script src="/adminpanel/112181/admin.js?v=20260504162102" defer></script>
+<link rel="stylesheet" href="/adminpanel/112181/admin.css?v=20260504164050" />
+<script src="/adminpanel/112181/admin.js?v=20260504164050" defer></script>
 </head>
 <body>
 <div id="app" class="app">
@@ -48,6 +48,7 @@
         <h3 id="editor-title">Editar gorra</h3>
         <button id="editor-close" class="ghost">Cerrar</button>
       </div>
+
       <div class="modal-body">
         <label>Nombre actual</label>
         <div id="editor-current-name" class="muted">-</div>
@@ -70,8 +71,53 @@
           </div>
         </div>
 
+        <div class="visual-config-box">
+          <div class="visual-config-head">
+            <div>
+              <div class="visual-title">Configuración visual</div>
+              <div class="visual-help">Ajusta posición y tamaño de la imagen de la gorra.</div>
+            </div>
+            <button id="editor-reset-visual" type="button" class="ghost small-btn">Reset</button>
+          </div>
+
+          <div class="visual-grid">
+            <div class="field">
+              <label for="editor-x">X</label>
+              <input id="editor-x" type="number" step="0.1" placeholder="-1" />
+            </div>
+
+            <div class="field">
+              <label for="editor-y">Y</label>
+              <input id="editor-y" type="number" step="0.1" placeholder="8" />
+            </div>
+
+            <div class="field">
+              <label for="editor-scale">Scale</label>
+              <input id="editor-scale" type="number" step="0.01" min="0.1" max="5" placeholder="1.55" />
+            </div>
+
+            <div class="field">
+              <label for="editor-width">Width px</label>
+              <input id="editor-width" type="number" step="1" min="80" max="900" placeholder="330" />
+            </div>
+
+            <div class="field">
+              <label for="editor-height">Height px</label>
+              <input id="editor-height" type="number" step="1" min="80" max="900" placeholder="320" />
+            </div>
+          </div>
+
+          <div class="visual-preview-line">
+            <span>Se guardará en:</span>
+            <code>position.txt</code>
+            <span>+</span>
+            <code>index.html</code>
+          </div>
+        </div>
+
         <div class="status" id="editor-status" hidden></div>
       </div>
+
       <div class="modal-foot">
         <button id="editor-cancel" class="ghost">Cancelar</button>
         <button id="editor-save" class="primary">Guardar cambios</button>

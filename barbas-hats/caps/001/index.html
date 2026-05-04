@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="Premium cap check page." />
   <title>GORRAS BARBAS HATS X CT CHROME 1 | Premium Cap Verify</title>
-  <link rel="stylesheet" href="/style.css?v=20260503213613" />
+  <link rel="stylesheet" href="/style.css?v=20260503214607" />
 </head>
 
 <body
@@ -24,7 +24,7 @@
       <div class="cap-photo-frame">
         <img
           id="capMainImage"
-          src="/assets/brands/barbas-hats.svg"
+          src="./001-web.jpg?v=20260503214607"
           alt="GORRAS BARBAS HATS X CT CHROME 1"
           class="cap-photo"
         />
@@ -75,10 +75,7 @@
 
       function tryNextImage() {
         if (!imageElement || index >= candidates.length) {
-          if (imageElement) {
-            imageElement.onerror = null;
-          }
-
+          if (imageElement) imageElement.onerror = null;
           return;
         }
 

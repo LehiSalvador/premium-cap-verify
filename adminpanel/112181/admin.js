@@ -2,7 +2,7 @@
   "use strict";
 
   var API = "/api/admin-caps";
-  var SESSION_KEY = "pcv_admin_pin";
+  var SESSION_KEY = "pcv_admin_pin_v2";
   var els = {};
   var state = {
     pin: "",

@@ -132,3 +132,21 @@ input:focus{outline:none;border-color:var(--accent)}
   .caps-grid{grid-template-columns:repeat(2,1fr)}
   .brand-sub{font-size:18px;letter-spacing:4px}
 }
+
+/* =========================================================
+   FIX: el atributo hidden debe ganar sobre .modal display:flex
+   ========================================================= */
+[hidden] {
+  display: none !important;
+}
+
+.modal[hidden],
+.toast[hidden],
+.logout[hidden],
+#editor[hidden],
+#editor-new-preview-wrap[hidden],
+#editor-status[hidden],
+#login-error[hidden],
+#caps-empty[hidden] {
+  display: none !important;
+}

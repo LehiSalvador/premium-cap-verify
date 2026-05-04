@@ -522,7 +522,7 @@ body.default-background {
 
 /* === MOBILE BACKGROUND VISIBILITY END === */
 
-/* === STANDARD CAP PHOTO SIZE START === */
+/* === STABLE CAP PHOTO SYSTEM START === */
 
 .cap-detail-page .card {
   overflow: visible;
@@ -564,10 +564,12 @@ body.default-background {
 }
 
 .cap-photo-img-clean {
-  position: relative;
-  z-index: 2;
+  position: relative !important;
+  z-index: 2 !important;
   width: 335px !important;
   height: 260px !important;
+  min-width: 335px !important;
+  min-height: 260px !important;
   max-width: 335px !important;
   max-height: 260px !important;
   object-fit: contain !important;
@@ -633,9 +635,11 @@ body.default-background {
   .cap-photo-img-clean {
     width: 335px !important;
     height: 260px !important;
+    min-width: 335px !important;
+    min-height: 260px !important;
     max-width: 335px !important;
     max-height: 260px !important;
   }
 }
 
-/* === STANDARD CAP PHOTO SIZE END === */
+/* === STABLE CAP PHOTO SYSTEM END === */

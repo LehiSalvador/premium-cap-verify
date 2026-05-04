@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="Premium cap check page." />
   <title>GORRA JC HATS 016 | Premium Cap Verify</title>
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/style.css?v=20260503201953" />
 </head>
 
 <body
@@ -61,6 +61,68 @@
   </main>
 
   <script src="/script.js?v=scan-counter-v4"></script>
-  <script src="/cap-page.js?v=cap-system-v3"></script>
+
+  <script>
+    (function () {
+      var capNameElement = document.querySelector(".cap-name");
+      var imageElement = document.getElementById("capMainImage");
+      var imageCandidates = ["./016.webp","./016.png","./016.jpg","./016.jpeg"];
+
+      function bust(url) {
+        if (!url) return url;
+        return url + (url.indexOf("?") >= 0 ? "&" : "?") + "live=" + Date.now();
+      }
+
+      function updateNameFromFile() {
+        if (!capNameElement) return;
+
+        fetch("./name.txt?live=" + Date.now(), {
+          method: "GET",
+          cache: "no-store"
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("name_not_found");
+            }
+
+            return response.text();
+          })
+          .then(function (text) {
+            var cleanText = String(text || "").trim();
+
+            if (cleanText.length > 0) {
+              capNameElement.textContent = cleanText.toUpperCase();
+            }
+          })
+          .catch(function () {
+            console.warn("No se pudo actualizar name.txt en vivo.");
+          });
+      }
+
+      function updateImageFromFolder() {
+        if (!imageElement || !imageCandidates || !imageCandidates.length) return;
+
+        var index = 0;
+
+        function tryNext() {
+          if (index >= imageCandidates.length) {
+            imageElement.onerror = null;
+            return;
+          }
+
+          var nextImage = imageCandidates[index];
+          index = index + 1;
+
+          imageElement.onerror = tryNext;
+          imageElement.src = bust(nextImage);
+        }
+
+        tryNext();
+      }
+
+      updateNameFromFile();
+      updateImageFromFolder();
+    })();
+  </script>
 </body>
 </html>

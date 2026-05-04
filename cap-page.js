@@ -1,75 +1,91 @@
-function setTextFromFile() {
-  const capNameElement = document.querySelector(".cap-name");
-
-  if (!capNameElement) {
-    return;
+(function () {
+  function getFolderBaseUrl() {
+    return new URL("./", window.location.href);
   }
 
-  fetch("name.txt?t=" + Date.now(), {
-    method: "GET",
-    cache: "no-store"
-  })
-    .then(function (response) {
+  function addNoCache(url) {
+    url.searchParams.set("v", Date.now().toString());
+    return url.href;
+  }
+
+  async function setTextFromFile() {
+    const capNameElement = document.querySelector(".cap-name");
+
+    if (!capNameElement) {
+      return;
+    }
+
+    try {
+      const folderBase = getFolderBaseUrl();
+      const nameUrl = new URL("name.txt", folderBase);
+      const response = await fetch(addNoCache(nameUrl), {
+        method: "GET",
+        cache: "no-store"
+      });
+
       if (!response.ok) {
         throw new Error("name_not_found");
       }
 
-      return response.text();
-    })
-    .then(function (text) {
+      const text = await response.text();
       const cleanText = text.trim();
 
       if (cleanText.length > 0) {
         capNameElement.textContent = cleanText.toUpperCase();
       }
-    })
-    .catch(function () {
-      console.warn("No se pudo cargar name.txt. Se usara el texto default.");
-    });
-}
-
-function loadCapImage() {
-  const body = document.body;
-  const image = document.getElementById("capMainImage");
-
-  if (!image) {
-    return;
+    } catch (error) {
+      console.warn("No se pudo cargar name.txt. Se usara el texto default.", error);
+    }
   }
 
-  const capId = body.dataset.capId;
-  const fallbackImage = body.dataset.brandImage;
+  function loadCapImage() {
+    const body = document.body;
+    const image = document.getElementById("capMainImage");
 
-  if (!capId) {
-    return;
-  }
-
-  const candidates = [
-    capId + ".webp",
-    capId + ".png",
-    capId + ".jpg",
-    capId + ".jpeg"
-  ];
-
-  let index = 0;
-
-  function tryNextImage() {
-    if (index >= candidates.length) {
-      if (fallbackImage) {
-        image.src = fallbackImage;
-      }
-
+    if (!image) {
       return;
     }
 
-    image.src = candidates[index] + "?t=" + Date.now();
-    index = index + 1;
+    const capId = body.dataset.capId;
+    const fallbackImage = body.dataset.brandImage;
+
+    if (!capId) {
+      return;
+    }
+
+    const folderBase = getFolderBaseUrl();
+
+    const candidates = [
+      capId + ".webp",
+      capId + ".png",
+      capId + ".jpg",
+      capId + ".jpeg"
+    ];
+
+    let index = 0;
+
+    function tryNextImage() {
+      if (index >= candidates.length) {
+        image.onerror = null;
+
+        if (fallbackImage) {
+          image.src = fallbackImage;
+        }
+
+        return;
+      }
+
+      const imageUrl = new URL(candidates[index], folderBase);
+      index = index + 1;
+      image.src = addNoCache(imageUrl);
+    }
+
+    image.onerror = tryNextImage;
+    tryNextImage();
   }
 
-  image.onerror = tryNextImage;
-  tryNextImage();
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  setTextFromFile();
-  loadCapImage();
-});
+  document.addEventListener("DOMContentLoaded", function () {
+    setTextFromFile();
+    loadCapImage();
+  });
+})();

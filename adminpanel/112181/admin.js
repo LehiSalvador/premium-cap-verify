@@ -141,17 +141,23 @@
   function openBrand(brand){
     state.brand = brand;
     els.capsTitle.textContent = brand.label.toUpperCase();
-    els.capsGrid.innerHTML = '<div class="muted">Cargando...</div>';
+    els.capsGrid.innerHTML = '<div class="muted">Cargando gorras 001 a 020...</div>';
     els.capsEmpty.hidden = true;
     setView(els.viewCaps);
+
     api("?action=listCaps&brand=" + encodeURIComponent(brand.id)).then(function(r){
-      if (!r.json || !r.json.ok) throw new Error(friendlyError((r.json && r.json.error) || "Error cargando gorras"));
+      if (!r.json || !r.json.ok) {
+        throw new Error((r.json && r.json.error) || "Error cargando gorras");
+      }
+
       state.caps = r.json.caps || [];
       renderCaps();
+
     }).catch(function(e){
       if (e && e.status === 401) return;
-      els.capsGrid.innerHTML = "";
-      showToast(friendlyError(e.message || "Error"), "err");
+
+      renderCapsError(e.message || "Error cargando gorras");
+      showToast(friendlyError(e.message || "Error cargando gorras"), "err");
     });
   }
 

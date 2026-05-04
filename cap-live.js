@@ -56,7 +56,11 @@
       var probe = new Image();
 
       probe.onload = function () {
-        resolve(true);
+        if (probe.naturalWidth > 10 && probe.naturalHeight > 10) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
       };
 
       probe.onerror = function () {
@@ -77,17 +81,27 @@
 
     var capId = data.capId;
 
+    /*
+      IMPORTANTE:
+      Primero buscamos la imagen original que tu subes:
+      002.png, 002.jpg, 002.webp, etc.
+
+      Al final buscamos 002-clean.png.
+      Asi evitamos que una imagen clean vieja o equivocada reemplace
+      la imagen correcta que acabas de subir.
+    */
+
     var candidates = [
-      "./" + capId + "-clean.png",
-      "./" + capId + "-clean.PNG",
       "./" + capId + ".png",
       "./" + capId + ".PNG",
-      "./" + capId + ".webp",
-      "./" + capId + ".WEBP",
       "./" + capId + ".jpg",
       "./" + capId + ".JPG",
       "./" + capId + ".jpeg",
-      "./" + capId + ".JPEG"
+      "./" + capId + ".JPEG",
+      "./" + capId + ".webp",
+      "./" + capId + ".WEBP",
+      "./" + capId + "-clean.png",
+      "./" + capId + "-clean.PNG"
     ];
 
     for (var i = 0; i < candidates.length; i++) {
@@ -97,12 +111,25 @@
       if (works) {
         imageElement.src = bust(candidate);
         imageElement.classList.add("cap-photo-img-clean");
+        imageElement.style.visibility = "visible";
         return;
       }
     }
 
+    /*
+      Si no encuentra imagen nueva, NO reemplaza por otra cosa.
+      Esto evita que cargue bien al inicio y luego cambie a una imagen
+      que no corresponde.
+    */
+
+    if (imageElement.getAttribute("src")) {
+      imageElement.style.visibility = "visible";
+      return;
+    }
+
     if (data.brandImage) {
       imageElement.src = bust(data.brandImage);
+      imageElement.style.visibility = "visible";
     }
   }
 

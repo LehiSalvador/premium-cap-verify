@@ -1,5 +1,5 @@
-const COUNTER_NAMESPACE = "premiumcapverify-site-salva";
-const BASE_SCAN_OFFSET = 2;
+const COUNTER_NAMESPACE = "premiumcapverify-site-reset-20260504014457";
+const BASE_SCAN_OFFSET = 0;
 
 function cleanKey(value) {
   return String(value || "")
@@ -105,7 +105,8 @@ export default async function handler(request, response) {
       key: safeKey,
       realCount: realCount,
       baseOffset: BASE_SCAN_OFFSET,
-      count: displayCount
+      count: displayCount,
+      namespace: COUNTER_NAMESPACE
     });
   } catch (error) {
     return response.status(500).json({

@@ -578,6 +578,30 @@ body.default-background {
   }
 }
 
+.green-dot {
+  animation: verifyPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes verifyPulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.75;
+    box-shadow: 0 0 6px rgba(32,255,122,0.45);
+  }
+
+  50% {
+    transform: scale(1.18);
+    opacity: 1;
+    box-shadow: 0 0 16px rgba(32,255,122,0.95);
+  }
+
+  100% {
+    transform: scale(0.92);
+    opacity: 0.75;
+    box-shadow: 0 0 6px rgba(32,255,122,0.45);
+  }
+}
+
 @media (max-width: 480px) {
   .cap-photo-frame {
     width: 285px !important;

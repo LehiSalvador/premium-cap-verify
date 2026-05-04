@@ -481,3 +481,114 @@ body.default-background {
 }
 
 /* === CAP IMAGE HARD FIX END === */
+
+/* === CAP PHOTO CLEAN EDGE GLOW START === */
+
+.cap-detail-page .card {
+  overflow: visible;
+}
+
+.cap-photo-frame {
+  position: relative !important;
+  width: 315px !important;
+  height: 245px !important;
+  margin: 0 auto 26px !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  animation: none !important;
+}
+
+.cap-photo-frame::after {
+  display: none !important;
+}
+
+.cap-photo-frame::before {
+  content: "";
+  position: absolute;
+  inset: 20px 20px 6px 20px;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at center, rgba(255,255,255,0.18), transparent 58%),
+    radial-gradient(ellipse at center, rgba(150,0,0,0.30), transparent 72%);
+  filter: blur(22px);
+  opacity: 0.55;
+  z-index: 0;
+  pointer-events: none;
+  animation: capSoftBackGlow 2.6s ease-in-out infinite;
+}
+
+.cap-photo-img-clean {
+  position: relative;
+  z-index: 2;
+  width: 112%;
+  height: 112%;
+  object-fit: contain;
+  display: block;
+  transform: scale(1.08);
+  filter:
+    drop-shadow(0 0 8px rgba(255,255,255,0.28))
+    drop-shadow(0 0 18px rgba(255,255,255,0.14))
+    drop-shadow(0 0 30px rgba(150,0,0,0.26));
+  animation: capEdgeGlow 2.6s ease-in-out infinite;
+}
+
+@keyframes capSoftBackGlow {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 0.75;
+    transform: scale(1.06);
+  }
+
+  100% {
+    opacity: 0.35;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes capEdgeGlow {
+  0% {
+    filter:
+      drop-shadow(0 0 6px rgba(255,255,255,0.20))
+      drop-shadow(0 0 14px rgba(255,255,255,0.10))
+      drop-shadow(0 0 24px rgba(150,0,0,0.18));
+  }
+
+  50% {
+    filter:
+      drop-shadow(0 0 12px rgba(255,255,255,0.38))
+      drop-shadow(0 0 24px rgba(255,255,255,0.18))
+      drop-shadow(0 0 42px rgba(150,0,0,0.38));
+  }
+
+  100% {
+    filter:
+      drop-shadow(0 0 6px rgba(255,255,255,0.20))
+      drop-shadow(0 0 14px rgba(255,255,255,0.10))
+      drop-shadow(0 0 24px rgba(150,0,0,0.18));
+  }
+}
+
+@media (max-width: 480px) {
+  .cap-photo-frame {
+    width: 285px !important;
+    height: 220px !important;
+  }
+
+  .cap-photo-img-clean {
+    width: 118%;
+    height: 118%;
+    transform: scale(1.10);
+  }
+}
+
+/* === CAP PHOTO CLEAN EDGE GLOW END === */

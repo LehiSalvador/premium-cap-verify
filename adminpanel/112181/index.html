@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="referrer" content="no-referrer" />
+<title>Premium Cap Verify Admin</title>
+<link rel="stylesheet" href="./admin.css" />
+<script src="./admin.js" defer></script>
+</head>
+<body>
+<div id="app" class="app">
+  <header class="app-header">
+    <div class="brand-line">PREMIUM CAP VERIFY</div>
+    <div class="brand-sub">ADMIN PANEL</div>
+  </header>
+
+  <section id="view-login" class="view active">
+    <div class="card login-card">
+      <h1>Premium Cap Verify Admin</h1>
+      <p class="muted">Acceso restringido. Ingresa tu PIN.</p>
+      <form id="login-form" autocomplete="off">
+        <input id="login-pin" type="password" placeholder="PIN de administrador" required autocomplete="new-password" />
+        <button type="submit" class="primary">Entrar</button>
+      </form>
+      <div id="login-error" class="error" hidden></div>
+    </div>
+  </section>
+
+  <section id="view-brands" class="view">
+    <h2>Selecciona una marca</h2>
+    <div id="brand-grid" class="brand-grid"></div>
+  </section>
+
+  <section id="view-caps" class="view">
+    <div class="row">
+      <button id="back-to-brands" class="ghost">&larr; Marcas</button>
+      <h2 id="caps-title">Gorras</h2>
+    </div>
+    <div id="caps-grid" class="caps-grid"></div>
+    <div id="caps-empty" class="muted" hidden>No hay gorras activas en esta marca.</div>
+  </section>
+
+  <div id="editor" class="modal" hidden>
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="editor-title">Editar gorra</h3>
+        <button id="editor-close" class="ghost">Cerrar</button>
+      </div>
+      <div class="modal-body">
+        <label>Nombre actual</label>
+        <div id="editor-current-name" class="muted">-</div>
+
+        <label for="editor-name">Nuevo nombre</label>
+        <input id="editor-name" type="text" maxlength="200" />
+
+        <label>Imagen actual</label>
+        <div class="image-preview">
+          <img id="editor-current-image" alt="" />
+        </div>
+
+        <label for="editor-file">Reemplazar imagen (opcional)</label>
+        <input id="editor-file" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" />
+
+        <div id="editor-new-preview-wrap" hidden>
+          <label>Vista previa nueva</label>
+          <div class="image-preview">
+            <img id="editor-new-preview" alt="" />
+          </div>
+        </div>
+
+        <div class="status" id="editor-status" hidden></div>
+      </div>
+      <div class="modal-foot">
+        <button id="editor-cancel" class="ghost">Cancelar</button>
+        <button id="editor-save" class="primary">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <button id="logout" class="logout ghost" hidden>Cerrar sesion</button>
+</div>
+</body>
+</html>

@@ -637,3 +637,14 @@ body.default-background {
 }
 
 /* === STANDARD CAP PHOTO SIZE END === */
+
+/* === CAP POSITION CONTROL START === */
+
+.cap-photo-img-clean {
+  transform:
+    translate(var(--cap-shift-x, 0px), var(--cap-shift-y, 0px))
+    scale(var(--cap-scale, 1.08)) !important;
+  transform-origin: center center !important;
+}
+
+/* === CAP POSITION CONTROL END === */

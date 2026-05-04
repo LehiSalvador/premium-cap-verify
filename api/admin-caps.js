@@ -155,7 +155,11 @@ async function githubGetContent(env, repoPath){
   const r = await githubRequest(env, url, { method: "GET" });
   if (r.status === 404) return null;
   if (!r.ok){
-    const e = new Error("GitHub get failed: " + r.status);
+    let detail = "GitHub get failed: " + r.status;
+    if (r.status === 401) detail = "GitHub token rechazado o vencido. Revisa GITHUB_TOKEN en Vercel Production.";
+    if (r.status === 403) detail = "GitHub no permitió leer este archivo. Revisa permisos del token.";
+    if (r.status === 404) detail = "No se encontró el archivo en GitHub.";
+    const e = new Error(detail);
     e.statusCode = 502;
     throw e;
   }
@@ -167,7 +171,11 @@ async function githubListDir(env, repoPath){
   const r = await githubRequest(env, url, { method: "GET" });
   if (r.status === 404) return [];
   if (!r.ok){
-    const e = new Error("GitHub list failed: " + r.status);
+    let detail = "GitHub list failed: " + r.status;
+    if (r.status === 401) detail = "GitHub token rechazado o vencido. Revisa GITHUB_TOKEN en Vercel Production.";
+    if (r.status === 403) detail = "GitHub no permitió leer el repo. Revisa permisos del token.";
+    if (r.status === 404) detail = "No se encontró la ruta en GitHub.";
+    const e = new Error(detail);
     e.statusCode = 502;
     throw e;
   }
@@ -192,7 +200,11 @@ async function githubPutContent(env, repoPath, contentBufferOrString, message){
     body: JSON.stringify(body)
   });
   if (!r.ok){
-    const e = new Error("GitHub put failed: " + r.status);
+    let detail = "GitHub put failed: " + r.status;
+    if (r.status === 401) detail = "GitHub token rechazado o vencido. Revisa GITHUB_TOKEN en Vercel Production.";
+    if (r.status === 403) detail = "GitHub no permitió escribir en el repo. Revisa que el token tenga permiso de escritura.";
+    if (r.status === 404) detail = "No se encontró la ruta para escribir en GitHub.";
+    const e = new Error(detail);
     e.statusCode = 502;
     throw e;
   }

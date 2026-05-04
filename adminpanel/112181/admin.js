@@ -131,7 +131,7 @@
         els.loginError.textContent = "PIN incorrecto.";
         els.loginError.hidden = false;
       } else {
-        showToast(e.message || "Error", "err");
+        showToast(friendlyError(e.message || "Error"), "err");
       }
     });
   }
@@ -145,13 +145,13 @@
     els.capsEmpty.hidden = true;
     setView(els.viewCaps);
     api("?action=listCaps&brand=" + encodeURIComponent(brand.id)).then(function(r){
-      if (!r.json || !r.json.ok) throw new Error((r.json && r.json.error) || "Error cargando gorras");
+      if (!r.json || !r.json.ok) throw new Error(friendlyError((r.json && r.json.error) || "Error cargando gorras"));
       state.caps = r.json.caps || [];
       renderCaps();
     }).catch(function(e){
       if (e && e.status === 401) return;
       els.capsGrid.innerHTML = "";
-      showToast(e.message || "Error", "err");
+      showToast(friendlyError(e.message || "Error"), "err");
     });
   }
 
@@ -270,7 +270,7 @@
     api("", { method:"POST", body: payload }).then(function(r){
       els.editorSave.disabled = false;
       if (!r.json || !r.json.ok){
-        showStatus((r.json && r.json.error) || "Error al guardar", "err");
+        showStatus(friendlyError((r.json && r.json.error) || "Error al guardar"), "err");
         return;
       }
       showStatus("Guardado. Vercel desplegara en breve.", "ok");
@@ -293,6 +293,53 @@
     });
   }
 
+
+  function friendlyError(message){
+    var msg = String(message || "Error desconocido");
+
+    if (msg.indexOf("GitHub list failed: 401") >= 0 || msg.indexOf("GitHub get failed: 401") >= 0 || msg.indexOf("GitHub put failed: 401") >= 0){
+      return "No se pudieron cargar las gorras porque GitHub rechazó el token. Ya actualizaste el token; recarga con Ctrl + F5. Si sigue igual, revisa que GITHUB_TOKEN esté en Production y que el deploy sea el más reciente.";
+    }
+
+    if (msg.indexOf("GitHub list failed: 403") >= 0 || msg.indexOf("GitHub get failed: 403") >= 0 || msg.indexOf("GitHub put failed: 403") >= 0){
+      return "GitHub sí respondió, pero no permitió el acceso. Revisa que el token tenga permiso repo o Contents Read/Write.";
+    }
+
+    if (msg.indexOf("Missing env") >= 0){
+      return "Falta configurar una variable de entorno en Vercel. Revisa GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH y ADMIN_PASSWORD.";
+    }
+
+    if (msg.indexOf("Cap not found") >= 0){
+      return "No se encontró esta gorra en el repositorio.";
+    }
+
+    if (msg.indexOf("Invalid brand") >= 0){
+      return "La marca seleccionada no es válida.";
+    }
+
+    if (msg.indexOf("Unauthorized") >= 0 || msg.indexOf("No autorizado") >= 0){
+      return "PIN incorrecto o sesión vencida. Vuelve a iniciar sesión.";
+    }
+
+    return msg;
+  }
+
+  function renderCapsError(message){
+    var clean = friendlyError(message);
+    els.capsGrid.innerHTML =
+      '<div class="caps-error-card">' +
+        '<div class="caps-error-title">No se pudieron cargar las gorras</div>' +
+        '<div class="caps-error-text">' + escapeHtml(clean) + '</div>' +
+        '<button id="retry-caps" class="primary retry-btn">Reintentar</button>' +
+      '</div>';
+
+    var retry = document.getElementById("retry-caps");
+    if (retry && state.brand){
+      retry.addEventListener("click", function(){
+        openBrand(state.brand);
+      });
+    }
+  }
   function escapeHtml(s){
     return String(s == null ? "" : s)
       .replace(/&/g,"&amp;")

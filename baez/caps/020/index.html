@@ -6,14 +6,13 @@
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="Premium cap check page." />
   <title>GORRA BAEZ 020 | Premium Cap Verify</title>
-  <link rel="stylesheet" href="/style.css?v=20260503214607" />
+  <link rel="stylesheet" href="/style.css?v=20260503215034" />
 </head>
 
 <body
   class="brand-background cap-detail-page"
   data-cap-id="020"
   data-brand-slug="baez"
-  data-brand-image="/assets/brands/baez.svg"
   style="--brand-bg: url('/assets/backgrounds/baez-bg.jpg');"
 >
   <main class="page">
@@ -22,12 +21,7 @@
       <p class="top-label">AUTHENTIC PREMIUM CAP</p>
 
       <div class="cap-photo-frame">
-        <img
-          id="capMainImage"
-          src="/assets/brands/baez.svg"
-          alt="GORRA BAEZ 020"
-          class="cap-photo"
-        />
+        <img src="/assets/brands/baez.svg" alt="GORRA BAEZ 020" class="cap-photo" />
       </div>
 
       <h1 class="main-title">AUTHENTIC</h1>
@@ -61,32 +55,5 @@
   </main>
 
   <script src="/script.js?v=scan-counter-v4"></script>
-
-  <script>
-    (function () {
-      var imageElement = document.getElementById("capMainImage");
-      var candidates = ["./020-web.jpg","./020.png","./020.jpg","./020.jpeg","./020.webp"];
-      var index = 0;
-
-      function bust(url) {
-        if (!url) return url;
-        return url + (url.indexOf("?") >= 0 ? "&" : "?") + "live=" + Date.now();
-      }
-
-      function tryNextImage() {
-        if (!imageElement || index >= candidates.length) {
-          if (imageElement) imageElement.onerror = null;
-          return;
-        }
-
-        var nextImage = candidates[index];
-        index = index + 1;
-        imageElement.onerror = tryNextImage;
-        imageElement.src = bust(nextImage);
-      }
-
-      tryNextImage();
-    })();
-  </script>
 </body>
 </html>

@@ -616,3 +616,41 @@ body.default-background {
 }
 
 /* === CAP PHOTO CLEAN EDGE GLOW END === */
+
+/* === MOBILE BACKGROUND VISIBILITY START === */
+
+@media (max-width: 600px) {
+  body.brand-background {
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.48)),
+      var(--brand-bg) !important;
+    background-size: cover !important;
+    background-position: center top !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important;
+  }
+
+  .page {
+    padding: 16px 14px !important;
+    background:
+      radial-gradient(circle at top center, rgba(255,255,255,0.035), transparent 36%),
+      linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.18) 52%, rgba(0,0,0,0.42) 100%) !important;
+  }
+
+  .card {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.020)),
+      rgba(8,8,8,0.68) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    box-shadow:
+      0 0 38px rgba(255,255,255,0.055),
+      0 0 82px rgba(120,0,0,0.20) !important;
+  }
+
+  .cap-detail-page .card {
+    border-color: rgba(255,255,255,0.18) !important;
+  }
+}
+
+/* === MOBILE BACKGROUND VISIBILITY END === */

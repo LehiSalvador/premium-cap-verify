@@ -575,7 +575,7 @@ body.default-background {
   display: block !important;
   transform:
     translate(var(--cap-shift-x, 0px), var(--cap-shift-y, 0px))
-    scale(var(--cap-scale, 1.18));
+    scale(var(--cap-scale, 1.18)) !important;
   transform-origin: center center !important;
   filter:
     drop-shadow(0 0 8px rgba(255,255,255,0.28))

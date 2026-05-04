@@ -34,6 +34,7 @@
 
       if (cleanText.length > 0) {
         var finalName = cleanText.toUpperCase();
+
         capNameElement.textContent = finalName;
         document.title = finalName + " | Premium Cap Verify";
 
@@ -106,10 +107,33 @@
     }
   }
 
+  function applyPosition(imageElement, x, y, scale) {
+    if (!imageElement) return;
+
+    imageElement.style.setProperty("--cap-shift-x", x + "px");
+    imageElement.style.setProperty("--cap-shift-y", y + "px");
+    imageElement.style.setProperty("--cap-scale", scale);
+
+    /*
+      Este transform inline es el fix fuerte:
+      aunque haya CSS anterior con !important, el navegador aplicara este ajuste.
+    */
+    imageElement.style.transform =
+      "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+
+    imageElement.style.transformOrigin = "center center";
+  }
+
   async function updateCapPosition() {
     var imageElement = document.getElementById("capMainImage");
 
     if (!imageElement) return;
+
+    var values = {
+      x: 0,
+      y: 0,
+      scale: 1.14
+    };
 
     try {
       var response = await fetch("./position.txt?live=" + Date.now(), {
@@ -121,11 +145,6 @@
 
       var text = await response.text();
       var lines = String(text || "").split(/\r?\n/);
-      var values = {
-        x: 0,
-        y: 0,
-        scale: 1.08
-      };
 
       lines.forEach(function (line) {
         var parts = line.split("=");
@@ -141,20 +160,23 @@
         if (key === "y") values.y = value;
         if (key === "scale") values.scale = value;
       });
-
-      imageElement.style.setProperty("--cap-shift-x", values.x + "px");
-      imageElement.style.setProperty("--cap-shift-y", values.y + "px");
-      imageElement.style.setProperty("--cap-scale", values.scale);
     } catch (error) {
-      imageElement.style.setProperty("--cap-shift-x", "0px");
-      imageElement.style.setProperty("--cap-shift-y", "0px");
-      imageElement.style.setProperty("--cap-scale", "1.08");
+      console.warn("No se pudo leer position.txt. Se usara posicion default.");
     }
+
+    applyPosition(imageElement, values.x, values.y, values.scale);
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     updateCapName();
     updateCapImage();
     updateCapPosition();
+
+    /*
+      Reaplicar despues de un momento evita que Safari/iPhone
+      ignore el primer ajuste por cache o por carga tardia.
+    */
+    setTimeout(updateCapPosition, 500);
+    setTimeout(updateCapPosition, 1200);
   });
 })();

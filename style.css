@@ -530,9 +530,9 @@ body.default-background {
 
 .cap-photo-frame {
   position: relative !important;
-  width: 315px !important;
-  height: 245px !important;
-  margin: 0 auto 26px !important;
+  width: 335px !important;
+  height: 260px !important;
+  margin: 0 auto 24px !important;
   border-radius: 0 !important;
   overflow: visible !important;
   background: transparent !important;
@@ -551,13 +551,13 @@ body.default-background {
 .cap-photo-frame::before {
   content: "";
   position: absolute;
-  inset: 20px 20px 6px 20px;
+  inset: 18px 18px 4px 18px;
   border-radius: 999px;
   background:
     radial-gradient(ellipse at center, rgba(255,255,255,0.18), transparent 58%),
     radial-gradient(ellipse at center, rgba(150,0,0,0.30), transparent 72%);
-  filter: blur(22px);
-  opacity: 0.55;
+  filter: blur(24px);
+  opacity: 0.60;
   z-index: 0;
   pointer-events: none;
   animation: capSoftBackGlow 2.6s ease-in-out infinite;
@@ -566,14 +566,17 @@ body.default-background {
 .cap-photo-img-clean {
   position: relative;
   z-index: 2;
-  width: 315px !important;
-  height: 245px !important;
-  max-width: 315px !important;
-  max-height: 245px !important;
+  width: 335px !important;
+  height: 260px !important;
+  max-width: 335px !important;
+  max-height: 260px !important;
   object-fit: contain !important;
   object-position: center center !important;
   display: block !important;
-  transform: scale(1.08);
+  transform:
+    translate(var(--cap-shift-x, 0px), var(--cap-shift-y, 0px))
+    scale(var(--cap-scale, 1.14));
+  transform-origin: center center !important;
   filter:
     drop-shadow(0 0 8px rgba(255,255,255,0.28))
     drop-shadow(0 0 18px rgba(255,255,255,0.14))
@@ -623,28 +626,16 @@ body.default-background {
 
 @media (max-width: 480px) {
   .cap-photo-frame {
-    width: 315px !important;
-    height: 245px !important;
+    width: 335px !important;
+    height: 260px !important;
   }
 
   .cap-photo-img-clean {
-    width: 315px !important;
-    height: 245px !important;
-    max-width: 315px !important;
-    max-height: 245px !important;
-    transform: scale(1.08);
+    width: 335px !important;
+    height: 260px !important;
+    max-width: 335px !important;
+    max-height: 260px !important;
   }
 }
 
 /* === STANDARD CAP PHOTO SIZE END === */
-
-/* === CAP POSITION CONTROL START === */
-
-.cap-photo-img-clean {
-  transform:
-    translate(var(--cap-shift-x, 0px), var(--cap-shift-y, 0px))
-    scale(var(--cap-scale, 1.08)) !important;
-  transform-origin: center center !important;
-}
-
-/* === CAP POSITION CONTROL END === */

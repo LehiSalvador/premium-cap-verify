@@ -15,6 +15,11 @@
     };
   }
 
+  function readNumber(value, fallback) {
+    var number = parseFloat(value);
+    return Number.isFinite(number) ? number : fallback;
+  }
+
   async function updateCapName() {
     var capNameElement = document.querySelector(".cap-name");
     var imageElement = document.getElementById("capMainImage");
@@ -107,32 +112,11 @@
     }
   }
 
-  function applyPosition(imageElement, x, y, scale) {
-    if (!imageElement) return;
-
-    imageElement.style.setProperty("--cap-shift-x", x + "px");
-    imageElement.style.setProperty("--cap-shift-y", y + "px");
-    imageElement.style.setProperty("--cap-scale", scale);
-
-    /*
-      Este transform inline es el fix fuerte:
-      aunque haya CSS anterior con !important, el navegador aplicara este ajuste.
-    */
-    imageElement.style.transform =
-      "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
-
-    imageElement.style.transformOrigin = "center center";
-  }
-
-  async function updateCapPosition() {
-    var imageElement = document.getElementById("capMainImage");
-
-    if (!imageElement) return;
-
+  async function readPosition() {
     var values = {
       x: 0,
       y: 0,
-      scale: 1.14
+      scale: 1.18
     };
 
     try {
@@ -141,7 +125,7 @@
         cache: "no-store"
       });
 
-      if (!response.ok) throw new Error("position_not_found");
+      if (!response.ok) return values;
 
       var text = await response.text();
       var lines = String(text || "").split(/\r?\n/);
@@ -152,31 +136,51 @@
         if (parts.length !== 2) return;
 
         var key = parts[0].trim().toLowerCase();
-        var value = parseFloat(parts[1].trim());
+        var value = parts[1].trim();
 
-        if (!Number.isFinite(value)) return;
-
-        if (key === "x") values.x = value;
-        if (key === "y") values.y = value;
-        if (key === "scale") values.scale = value;
+        if (key === "x") values.x = readNumber(value, values.x);
+        if (key === "y") values.y = readNumber(value, values.y);
+        if (key === "scale") values.scale = readNumber(value, values.scale);
       });
     } catch (error) {
-      console.warn("No se pudo leer position.txt. Se usara posicion default.");
+      console.warn("No se pudo leer position.txt.", error);
     }
 
-    applyPosition(imageElement, values.x, values.y, values.scale);
+    return values;
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    updateCapName();
-    updateCapImage();
-    updateCapPosition();
+  function applyPosition(values) {
+    var imageElement = document.getElementById("capMainImage");
 
-    /*
-      Reaplicar despues de un momento evita que Safari/iPhone
-      ignore el primer ajuste por cache o por carga tardia.
-    */
+    if (!imageElement) return;
+
+    var transformValue =
+      "translate(" + values.x + "px, " + values.y + "px) scale(" + values.scale + ")";
+
+    imageElement.style.setProperty("--cap-shift-x", values.x + "px");
+    imageElement.style.setProperty("--cap-shift-y", values.y + "px");
+    imageElement.style.setProperty("--cap-scale", values.scale);
+
+    imageElement.style.setProperty("transform", transformValue, "important");
+    imageElement.style.setProperty("transform-origin", "center center", "important");
+    imageElement.style.setProperty("object-fit", "contain", "important");
+    imageElement.style.setProperty("object-position", "center center", "important");
+    imageElement.style.setProperty("visibility", "visible", "important");
+  }
+
+  async function updateCapPosition() {
+    var values = await readPosition();
+    applyPosition(values);
+  }
+
+  async function initCapPage() {
+    await updateCapName();
+    await updateCapImage();
+    await updateCapPosition();
+
     setTimeout(updateCapPosition, 500);
     setTimeout(updateCapPosition, 1200);
-  });
+  }
+
+  document.addEventListener("DOMContentLoaded", initCapPage);
 })();

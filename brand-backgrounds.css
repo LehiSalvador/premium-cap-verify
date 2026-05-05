@@ -1,0 +1,80 @@
+/* =========================================================
+   PREMIUM CAP VERIFY — Brand Backgrounds
+   Fondos por marca con blur muy ligero
+   ========================================================= */
+
+body[data-brand-slug] {
+  position: relative;
+  isolation: isolate;
+  background: #050506 !important;
+  overflow-x: hidden;
+}
+
+body[data-brand-slug]::before {
+  content: "";
+  position: fixed;
+  inset: -8px;
+  z-index: -2;
+  background-image: var(--brand-bg-image);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  filter: blur(1.5px);
+  transform: scale(1.015);
+  opacity: 0.58;
+  pointer-events: none;
+  will-change: transform;
+}
+
+body[data-brand-slug]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.68) 58%, rgba(0, 0, 0, 0.88) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.78));
+  pointer-events: none;
+}
+
+body[data-brand-slug="barbas-hats"] {
+  --brand-bg-image: url("/assets/backgrounds/barbas-hats-bg.jpg");
+}
+
+body[data-brand-slug="dandy-hats"] {
+  --brand-bg-image: url("/assets/backgrounds/DANDY.png");
+}
+
+body[data-brand-slug="rude-awakenings"] {
+  --brand-bg-image: url("/assets/backgrounds/RUDE.png");
+}
+
+body[data-brand-slug="31-hats"] {
+  --brand-bg-image: url("/assets/backgrounds/31.png");
+}
+
+body[data-brand-slug="gallo-fino"] {
+  --brand-bg-image: url("/assets/backgrounds/GALLOS.png");
+}
+
+body[data-brand-slug="jc-hats"] {
+  --brand-bg-image: url("/assets/backgrounds/JCHATS.png");
+}
+
+body[data-brand-slug="baez"] {
+  --brand-bg-image: url("/assets/backgrounds/BAEZ.png");
+}
+
+@media (max-width: 600px) {
+  body[data-brand-slug]::before {
+    opacity: 0.66;
+    filter: blur(1.25px);
+    transform: scale(1.012);
+  }
+
+  body[data-brand-slug]::after {
+    background:
+      radial-gradient(circle at 50% 34%, rgba(0,0,0,0.12), rgba(0,0,0,0.56) 58%, rgba(0,0,0,0.82) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.20), rgba(0,0,0,0.70));
+  }
+}

@@ -23,5 +23,3 @@ Orden de búsqueda del loader:
 4. assets/logos-marcas/marca.jpeg
 5. assets/logos-marcas/marca.svg
 6. assets/brands/marca.svg como respaldo
-
-No borres este README.

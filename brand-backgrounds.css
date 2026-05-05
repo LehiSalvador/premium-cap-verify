@@ -1,40 +1,77 @@
 /* =========================================================
-   PREMIUM CAP VERIFY — Brand Backgrounds
-   Fondos por marca con blur muy ligero
+   PREMIUM CAP VERIFY — Brand Backgrounds FIX
+   Fondo visible por marca + blur ligero
    ========================================================= */
 
-body[data-brand-slug] {
-  position: relative;
-  isolation: isolate;
+html {
   background: #050506 !important;
+  min-height: 100%;
+}
+
+body[data-brand-slug] {
+  --brand-bg-image: none;
+  position: relative;
+  min-height: 100vh;
+  background-color: #050506 !important;
+  background-image:
+    radial-gradient(circle at 50% 36%, rgba(255,255,255,0.025), transparent 34%),
+    linear-gradient(180deg, #050506 0%, #000 100%) !important;
   overflow-x: hidden;
 }
 
-body[data-brand-slug]::before {
-  content: "";
+/* Capa real de imagen: no usa z-index negativo para que no se esconda */
+body[data-brand-slug] .brand-bg-fixed {
   position: fixed;
-  inset: -8px;
-  z-index: -2;
+  inset: -10px;
+  z-index: 0;
   background-image: var(--brand-bg-image);
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   filter: blur(1.5px);
-  transform: scale(1.015);
-  opacity: 0.58;
+  transform: scale(1.018);
+  opacity: 0.74;
   pointer-events: none;
   will-change: transform;
 }
 
-body[data-brand-slug]::after {
-  content: "";
+/* Capa oscura premium encima del fondo */
+body[data-brand-slug] .brand-bg-vignette {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 1;
   background:
-    radial-gradient(circle at 50% 36%, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.68) 58%, rgba(0, 0, 0, 0.88) 100%),
-    linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.78));
+    radial-gradient(circle at 50% 34%, rgba(0,0,0,0.08), rgba(0,0,0,0.48) 54%, rgba(0,0,0,0.80) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.68));
   pointer-events: none;
+}
+
+/* Todo el contenido va arriba del fondo */
+body[data-brand-slug] > *:not(.brand-bg-fixed):not(.brand-bg-vignette):not(#pcv-brand-loader) {
+  position: relative;
+  z-index: 2;
+}
+
+/* Evita que wrappers principales tapen el fondo con negro sólido */
+body[data-brand-slug] main,
+body[data-brand-slug] .app,
+body[data-brand-slug] .page,
+body[data-brand-slug] .page-shell,
+body[data-brand-slug] .auth-page,
+body[data-brand-slug] .auth-shell,
+body[data-brand-slug] .verify-page,
+body[data-brand-slug] .verify-shell,
+body[data-brand-slug] .cap-page,
+body[data-brand-slug] .cap-shell,
+body[data-brand-slug] .premium-page,
+body[data-brand-slug] .screen,
+body[data-brand-slug] .wrapper {
+  background: transparent !important;
+}
+
+/* El loader siempre por encima */
+body[data-brand-slug] #pcv-brand-loader {
+  z-index: 2147483000 !important;
 }
 
 body[data-brand-slug="barbas-hats"] {
@@ -66,15 +103,15 @@ body[data-brand-slug="baez"] {
 }
 
 @media (max-width: 600px) {
-  body[data-brand-slug]::before {
-    opacity: 0.66;
+  body[data-brand-slug] .brand-bg-fixed {
     filter: blur(1.25px);
-    transform: scale(1.012);
+    opacity: 0.78;
+    transform: scale(1.014);
   }
 
-  body[data-brand-slug]::after {
+  body[data-brand-slug] .brand-bg-vignette {
     background:
-      radial-gradient(circle at 50% 34%, rgba(0,0,0,0.12), rgba(0,0,0,0.56) 58%, rgba(0,0,0,0.82) 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.20), rgba(0,0,0,0.70));
+      radial-gradient(circle at 50% 34%, rgba(0,0,0,0.04), rgba(0,0,0,0.42) 56%, rgba(0,0,0,0.74) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.62));
   }
 }

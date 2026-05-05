@@ -440,3 +440,70 @@ html.pcv-loader-active body {
     letter-spacing: 2.4px;
   }
 }
+
+/* =========================================================
+   PERFORMANCE PATCH — Loader burn optimizado
+   Mantiene el efecto, pero baja carga de GPU/CPU
+   ========================================================= */
+
+.pcv-brand-loader {
+  contain: layout paint style;
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+.pcv-loader-logo-wrap,
+.pcv-loader-logo,
+.pcv-burn-edge {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+.pcv-brand-loader::before {
+  opacity: 0.18;
+  animation-duration: 14s;
+}
+
+.pcv-brand-loader::after {
+  opacity: 0.28;
+  animation-duration: 4.8s;
+}
+
+.pcv-loader-logo-wrap {
+  box-shadow:
+    0 0 18px rgba(255,255,255,0.13),
+    0 0 34px rgba(0,255,136,0.15),
+    0 0 52px rgba(255,80,20,0.08),
+    inset 0 0 18px rgba(255,255,255,0.06);
+}
+
+.pcv-loader-logo-wrap::before {
+  box-shadow:
+    0 0 16px rgba(255,255,255,0.20),
+    0 0 28px rgba(0,255,136,0.18),
+    0 0 42px rgba(255,90,20,0.12);
+}
+
+.pcv-burn-edge {
+  filter: blur(4px) saturate(1.18);
+}
+
+.pcv-burn-sparks {
+  filter: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 22% 34%, rgba(255,180,30,0.80) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 30%, rgba(255,85,20,0.70) 0 1px, transparent 2px),
+    radial-gradient(circle at 46% 74%, rgba(255,215,90,0.72) 0 1px, transparent 2px);
+}
+
+.pcv-loader-scan {
+  animation-duration: 2.15s;
+}
+
+.pcv-loader-logo {
+  filter:
+    drop-shadow(0 0 7px rgba(255,255,255,0.18))
+    drop-shadow(0 0 13px rgba(0,255,136,0.18));
+}

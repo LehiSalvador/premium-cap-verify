@@ -1,8 +1,8 @@
 (function(){
   "use strict";
 
-  var TOTAL_MS = 6000;
-  var HOLD_MS = 2600;
+  var TOTAL_MS = 7000;
+  var HOLD_MS = 3000;
   var BURN_MS = TOTAL_MS - HOLD_MS;
 
   var started = false;
@@ -132,6 +132,9 @@
     overlay.classList.add("pcv-loader-burning");
 
     var start = performance.now();
+    var lastPaint = 0;
+    var frameInterval = 1000 / 24; // 24 FPS para reducir lag.
+    var lastBurn = -1;
 
     function frame(now){
       if (finished) return;
@@ -140,7 +143,16 @@
       var eased = easeOutCubic(raw);
       var burn = eased * 168;
 
-      overlay.style.setProperty("--pcv-burn", burn.toFixed(2) + "%");
+      if ((now - lastPaint) >= frameInterval || raw >= 1) {
+        var roundedBurn = Math.round(burn * 10) / 10;
+
+        if (roundedBurn !== lastBurn) {
+          overlay.style.setProperty("--pcv-burn", roundedBurn + "%");
+          lastBurn = roundedBurn;
+        }
+
+        lastPaint = now;
+      }
 
       if (raw < 1) {
         requestAnimationFrame(frame);

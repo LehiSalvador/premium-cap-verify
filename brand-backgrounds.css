@@ -30,7 +30,7 @@ body[data-brand-slug] .brand-bg-fixed {
   background-repeat: no-repeat;
   filter: blur(1.5px);
   transform: scale(1.018);
-  opacity: 0.74;
+  opacity: 0.79;
   pointer-events: none;
   will-change: transform;
 }
@@ -41,8 +41,8 @@ body[data-brand-slug] .brand-bg-vignette {
   inset: 0;
   z-index: 1;
   background:
-    radial-gradient(circle at 50% 34%, rgba(0,0,0,0.08), rgba(0,0,0,0.48) 54%, rgba(0,0,0,0.80) 100%),
-    linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.68));
+    radial-gradient(circle at 50% 34%, rgba(0,0,0,0.05), rgba(0,0,0,0.43) 54%, rgba(0,0,0,0.75) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.63));
   pointer-events: none;
 }
 
@@ -105,13 +105,13 @@ body[data-brand-slug="baez"] {
 @media (max-width: 600px) {
   body[data-brand-slug] .brand-bg-fixed {
     filter: blur(1.25px);
-    opacity: 0.78;
+    opacity: 0.83;
     transform: scale(1.014);
   }
 
   body[data-brand-slug] .brand-bg-vignette {
     background:
-      radial-gradient(circle at 50% 34%, rgba(0,0,0,0.04), rgba(0,0,0,0.42) 56%, rgba(0,0,0,0.74) 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.62));
+      radial-gradient(circle at 50% 34%, rgba(0,0,0,0.02), rgba(0,0,0,0.37) 56%, rgba(0,0,0,0.69) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.57));
   }
 }

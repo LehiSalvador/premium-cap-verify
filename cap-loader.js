@@ -88,14 +88,24 @@
   }
 
   function tryLogoSources(img, brand){
-    var sources = [
+    var customLogoMap = {
+      "barbas-hats": "/assets/logos-marcas/barbaslogo.png"
+    };
+
+    var sources = [];
+
+    if (customLogoMap[brand]) {
+      sources.push(customLogoMap[brand]);
+    }
+
+    sources = sources.concat([
       "/assets/logos-marcas/" + brand + ".webp",
       "/assets/logos-marcas/" + brand + ".png",
       "/assets/logos-marcas/" + brand + ".jpg",
       "/assets/logos-marcas/" + brand + ".jpeg",
       "/assets/logos-marcas/" + brand + ".svg",
       "/assets/brands/" + brand + ".svg"
-    ];
+    ]);
 
     var index = 0;
 

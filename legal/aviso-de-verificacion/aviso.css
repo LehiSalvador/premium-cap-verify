@@ -1,0 +1,108 @@
+:root {
+  --bg: #050506;
+  --card: rgba(16, 16, 20, 0.86);
+  --border: rgba(255,255,255,0.13);
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.62);
+  --accent: rgba(0,255,136,0.88);
+  --danger: rgba(255,90,90,0.92);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,0.055), transparent 28%),
+    radial-gradient(circle at 50% 52%, rgba(0,255,136,0.035), transparent 34%),
+    #050506;
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.legal-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 28px 16px;
+}
+
+.legal-card {
+  width: min(860px, 100%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: clamp(22px, 5vw, 48px);
+  box-shadow:
+    0 26px 80px rgba(0,0,0,0.58),
+    inset 0 0 28px rgba(255,255,255,0.025);
+  backdrop-filter: blur(10px);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 4px;
+  font-weight: 800;
+}
+
+h1 {
+  margin: 0 0 18px;
+  font-size: clamp(30px, 6vw, 58px);
+  letter-spacing: 1px;
+  line-height: 0.95;
+}
+
+h2 {
+  margin: 28px 0 10px;
+  font-size: 16px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+
+p {
+  margin: 0 0 14px;
+  color: var(--muted);
+  line-height: 1.68;
+  font-size: 15px;
+}
+
+.lead {
+  color: rgba(255,255,255,0.82);
+  font-size: 17px;
+}
+
+.notice-box {
+  margin: 26px 0;
+  padding: 18px;
+  border: 1px solid rgba(0,255,136,0.22);
+  background: rgba(0,255,136,0.045);
+  border-radius: 18px;
+}
+
+.notice-box h2 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+.back-link {
+  display: inline-flex;
+  margin-top: 24px;
+  color: rgba(255,255,255,0.86);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 11px 16px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.back-link:hover {
+  border-color: rgba(0,255,136,0.45);
+  color: var(--accent);
+}

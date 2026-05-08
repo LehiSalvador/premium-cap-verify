@@ -1,0 +1,56 @@
+/* =========================================================
+   PREMIUM CAP VERIFY — Botón inferior aviso de verificación
+   ========================================================= */
+
+.verification-notice-footer {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px 22px;
+  margin-top: 4px;
+}
+
+.verification-notice-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.42);
+  text-decoration: none;
+  font-size: 10.5px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 999px;
+  padding: 8px 11px;
+  background: rgba(0,0,0,0.16);
+  backdrop-filter: blur(6px);
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    opacity 180ms ease;
+  opacity: 0.78;
+}
+
+.verification-notice-link:hover {
+  color: rgba(255,255,255,0.72);
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.045);
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .verification-notice-footer {
+    padding-bottom: 18px;
+  }
+
+  .verification-notice-link {
+    font-size: 9.5px;
+    letter-spacing: 1.3px;
+    padding: 7px 10px;
+  }
+}

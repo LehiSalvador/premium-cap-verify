@@ -1,0 +1,70 @@
+/* =========================================================
+   PREMIUM CAP VERIFY — Trust microcopy
+   ========================================================= */
+
+.sec-auth-context {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  text-align: center;
+  margin: -2px auto 10px;
+  pointer-events: none;
+}
+
+.sec-auth-verified {
+  color: rgba(255,255,255,0.68);
+  font-size: 10.5px;
+  line-height: 1.15;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(0,0,0,0.42);
+}
+
+.sec-seller-record {
+  margin-top: 4px;
+  color: rgba(255,255,255,0.24);
+  font-size: 7.5px;
+  line-height: 1;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.sec-internal-sale-record {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  text-align: center;
+  color: rgba(255,255,255,0.36);
+  font-size: 9.5px;
+  line-height: 1.2;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 12px auto -2px;
+  text-shadow: 0 0 10px rgba(0,0,0,0.35);
+}
+
+@media (max-width: 600px) {
+  .sec-auth-context {
+    margin-top: -1px;
+    margin-bottom: 8px;
+  }
+
+  .sec-auth-verified {
+    font-size: 9.5px;
+    letter-spacing: 1.45px;
+  }
+
+  .sec-seller-record {
+    font-size: 6.8px;
+    letter-spacing: 1.8px;
+  }
+
+  .sec-internal-sale-record {
+    font-size: 8.6px;
+    letter-spacing: 1.3px;
+    margin-top: 10px;
+  }
+}

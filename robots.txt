@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /
+
+# Premium Cap Verify
+# Páginas privadas de verificación NFC.
+# No indexar ni rastrear.

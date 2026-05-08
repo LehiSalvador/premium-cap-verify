@@ -1,5 +1,5 @@
 x = 0
 y = 0
-scale = 0.7
-width = 335px
-height = 260px
+scale = 1.06
+width = 300px
+height = 200px

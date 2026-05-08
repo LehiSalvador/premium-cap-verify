@@ -1,3 +1,5 @@
-x=-1
-y=8
-scale=1.60
+x = -1
+y = 8
+scale = 1.6
+width = 335px
+height = 260px

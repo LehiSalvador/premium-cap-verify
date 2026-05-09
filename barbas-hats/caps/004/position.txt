@@ -1,5 +1,5 @@
 x = -1
 y = 8
 scale = 1.55
-width = 250px
-height = 162px
+width = 125px
+height = 107px

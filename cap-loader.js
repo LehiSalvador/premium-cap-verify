@@ -89,7 +89,9 @@
 
   function tryLogoSources(img, brand){
     var customLogoMap = {
-      "barbas-hats": "/assets/logos-marcas/barbaslogo.png"
+      "barbas-hats": "/assets/logos-marcas/barbaslogo.png",
+      "31-hats": "/assets/logos-marcas/31%20logo.png",
+      "dandy-hats": "/assets/logos-marcas/Dandy%20logo.png"
     };
 
     var sources = [];

@@ -1,5 +1,7 @@
-const COUNTER_NAMESPACE = "premiumcapverify-site-reset-20260504094415";
+const BASE_COUNTER_NAMESPACE = "premiumcapverify-site-reset-20260504094415";
 const BASE_SCAN_OFFSET = 0;
+const SCAN_WINDOW_HOURS = 48;
+const SCAN_WINDOW_MS = SCAN_WINDOW_HOURS * 60 * 60 * 1000;
 
 function cleanKey(value) {
   return String(value || "")
@@ -9,6 +11,20 @@ function cleanKey(value) {
     .replace(/-+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 120);
+}
+
+function getScanWindow(now) {
+  const timestamp = Number.isFinite(Number(now)) ? Number(now) : Date.now();
+  const windowIndex = Math.floor(timestamp / SCAN_WINDOW_MS);
+  const windowStart = windowIndex * SCAN_WINDOW_MS;
+  const windowEnd = windowStart + SCAN_WINDOW_MS;
+
+  return {
+    index: windowIndex,
+    namespace: BASE_COUNTER_NAMESPACE + "-48h-" + windowIndex,
+    startedAt: new Date(windowStart).toISOString(),
+    endsAt: new Date(windowEnd).toISOString()
+  };
 }
 
 function extractCount(data) {
@@ -64,9 +80,11 @@ export default async function handler(request, response) {
       });
     }
 
+    const scanWindow = getScanWindow(Date.now());
+
     const counterUrl =
       "https://api.counterapi.dev/v1/" +
-      encodeURIComponent(COUNTER_NAMESPACE) +
+      encodeURIComponent(scanWindow.namespace) +
       "/" +
       encodeURIComponent(safeKey) +
       "/up";
@@ -106,7 +124,12 @@ export default async function handler(request, response) {
       realCount: realCount,
       baseOffset: BASE_SCAN_OFFSET,
       count: displayCount,
-      namespace: COUNTER_NAMESPACE
+      namespace: scanWindow.namespace,
+      counterMode: "48h_window",
+      windowHours: SCAN_WINDOW_HOURS,
+      windowIndex: scanWindow.index,
+      windowStartedAt: scanWindow.startedAt,
+      nextResetAt: scanWindow.endsAt
     });
   } catch (error) {
     return response.status(500).json({

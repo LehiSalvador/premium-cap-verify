@@ -29,12 +29,28 @@ function getScanKey() {
   return cleanPath || "home";
 }
 
+function updateScanLabel(scanElement) {
+  if (!scanElement || !scanElement.parentElement) {
+    return;
+  }
+
+  const label = scanElement.parentElement.querySelector("p");
+
+  if (!label) {
+    return;
+  }
+
+  label.textContent = "48H SCAN COUNT";
+}
+
 async function updateScanCount() {
   const scanElement = document.getElementById("scanCount");
 
   if (!scanElement) {
     return;
   }
+
+  updateScanLabel(scanElement);
 
   const scanKey = getScanKey();
 
@@ -55,6 +71,10 @@ async function updateScanCount() {
     }
 
     scanElement.textContent = formatScans(data.count);
+
+    if (data.nextResetAt) {
+      scanElement.title = "This 48-hour counter resets at " + data.nextResetAt;
+    }
   } catch (error) {
     console.error("Scan counter request failed:", error);
     scanElement.textContent = "SCAN ERROR";

@@ -1,4 +1,4 @@
-const BASE_COUNTER_NAMESPACE = "premiumcapverify-site-reset-20260504094415";
+const BASE_COUNTER_NAMESPACE = "premiumcapverify-site-reset-20260514202409";
 const BASE_SCAN_OFFSET = 0;
 const SCAN_WINDOW_HOURS = 48;
 const SCAN_WINDOW_MS = SCAN_WINDOW_HOURS * 60 * 60 * 1000;

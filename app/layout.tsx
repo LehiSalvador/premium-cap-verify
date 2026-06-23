@@ -20,6 +20,13 @@ const quicksand = Quicksand({
 const SITE_URL = "https://premiumcapverify.site";
 const OG_TITLE = "Invitación a la fiesta de Mia Isabella";
 const OG_DESCRIPTION = "Te esperamos este 14 de julio a las 4:00 pm. ¡No faltes!";
+// El banner real del evento sirve como portada del preview de WhatsApp.
+const OG_IMAGE = {
+  url: "/assets/imagenes/banner-ubicacion.jpg",
+  width: 1600,
+  height: 800,
+  alt: OG_TITLE,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -33,11 +40,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_MX",
     siteName: "Invitación Mia Isabella",
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: OG_TITLE,
     description: OG_DESCRIPTION,
+    images: [OG_IMAGE.url],
   },
   // Invitacion privada: no indexar en buscadores (el preview de WhatsApp sigue funcionando).
   robots: { index: false, follow: false },

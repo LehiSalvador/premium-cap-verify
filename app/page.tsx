@@ -6,7 +6,7 @@ const MAPS_URL = "https://maps.app.goo.gl/zhxMEY4R3L6mgZc9A";
 // Video final servido desde Vercel Blob (no se sube a GitHub por su peso ~103 MB).
 // URL publica del Blob; no contiene secretos.
 const VIDEO_URL =
-  "https://qi9hwppeztvjguvu.public.blob.vercel-storage.com/mia-isabella/invitation.mp4";
+  "https://qi9hwppeztvjguvu.public.blob.vercel-storage.com/mia-isabella/invitation-final-v2.mp4";
 
 export default function Home() {
   return (

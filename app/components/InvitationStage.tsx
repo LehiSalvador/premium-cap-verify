@@ -13,9 +13,9 @@ type StageProps = {
   shortName: string;
 };
 
-// Pausa entre reproducciones (no es loop continuo): corre una vez, termina,
-// espera 3 s y reinicia, solo si la pagina esta visible y ya se abrio.
-const REPLAY_DELAY_MS = 3000;
+// El video se reproduce UNA sola vez tras el tap del usuario. No hay loop ni
+// replay automatico: al terminar se muestra el boton "Volver a ver" y solo se
+// reproduce de nuevo si el usuario lo decide (politica anti-consumo de transferencia).
 
 export default function InvitationStage({
   videoSrc,
@@ -27,26 +27,20 @@ export default function InvitationStage({
   shortName,
 }: StageProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const replayTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const openedRef = useRef(false);
 
   const [opened, setOpened] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const [showSoundFallback, setShowSoundFallback] = useState(false);
-
-  const clearReplay = useCallback(() => {
-    if (replayTimer.current) {
-      clearTimeout(replayTimer.current);
-      replayTimer.current = null;
-    }
-  }, []);
+  const [ended, setEnded] = useState(false);
 
   // Abrir invitacion: gesto del usuario -> reproducir desde 0 CON sonido.
   const openInvitation = useCallback(() => {
     const v = videoRef.current;
     openedRef.current = true;
     setOpened(true);
+    setEnded(false);
     if (!v) return;
     v.currentTime = 0;
     v.muted = false;
@@ -87,28 +81,31 @@ export default function InvitationStage({
     }
   }, []);
 
-  // Al terminar: esperar 3 s y reiniciar (solo si visible + abierto).
+  // Al terminar: NO se reinicia solo. Se marca como terminado para mostrar el
+  // boton "Volver a ver" (reproduccion manual unicamente, sin loop ni replay).
   const handleEnded = useCallback(() => {
-    clearReplay();
-    replayTimer.current = setTimeout(() => {
-      const v = videoRef.current;
-      if (!v || document.hidden || !openedRef.current) return;
-      v.currentTime = 0;
-      const p = v.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
-    }, REPLAY_DELAY_MS);
-  }, [clearReplay]);
+    setEnded(true);
+  }, []);
 
-  // Pausar en background; reanudar al volver (nunca reproducir oculto).
+  // Volver a ver: solo por accion explicita del usuario.
+  const replay = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    setEnded(false);
+    v.currentTime = 0;
+    const p = v.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  }, []);
+
+  // Pausar en background; reanudar (misma posicion) al volver si no ha terminado.
+  // Nunca reproduce oculto y nunca reinicia automaticamente.
   useEffect(() => {
     const onVisibility = () => {
       const v = videoRef.current;
       if (!v) return;
       if (document.hidden) {
         v.pause();
-        clearReplay();
-      } else if (openedRef.current) {
-        if (v.ended) v.currentTime = 0;
+      } else if (openedRef.current && !v.ended) {
         const p = v.play();
         if (p && typeof p.catch === "function") p.catch(() => {});
       }
@@ -116,9 +113,8 @@ export default function InvitationStage({
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
       document.removeEventListener("visibilitychange", onVisibility);
-      clearReplay();
     };
-  }, [clearReplay]);
+  }, []);
 
   return (
     <main className="page">
@@ -150,7 +146,7 @@ export default function InvitationStage({
           </div>
 
           {/* Boton de sonido secundario (solo si el audio fue bloqueado) */}
-          {opened && showSoundFallback && !soundOn && (
+          {opened && showSoundFallback && !soundOn && !ended && (
             <button
               type="button"
               className="sound-btn"
@@ -159,6 +155,20 @@ export default function InvitationStage({
             >
               🔈 Activar sonido
             </button>
+          )}
+
+          {/* Al terminar: scrim + accion manual para volver a ver (sin replay automatico) */}
+          {opened && ended && (
+            <div className="replay-overlay">
+              <button
+                type="button"
+                className="replay-btn"
+                onClick={replay}
+                aria-label="Volver a ver el video de la invitación"
+              >
+                ↺ Volver a ver
+              </button>
+            </div>
           )}
         </div>
 

@@ -31,6 +31,12 @@ tokens.*
 # ----- vercel -----
 .vercel
 
+# ----- media pesada (videos van a Supabase Storage, NUNCA a GitHub) -----
+*.mp4
+*.mov
+*.webm
+*.m4v
+
 # ----- logs -----
 *.log
 npm-debug.log*
